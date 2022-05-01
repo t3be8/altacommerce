@@ -1,0 +1,796 @@
+openapi: 3.0.2
+info:
+  title: API Ecommerce
+  version: 1.0.1
+  description: File ini digunakan untuk Menampilkan OPEN API Aplikasi Ecommerce
+ 
+tags:
+  - name: Authencation
+  - name: User
+  - name: Product
+  - name: Cart
+  - name: Order
+servers:
+  - url: http://localhost:8000/
+    description: URL untuk fase Ujicoba
+    
+paths:
+  /Login:
+    post:
+      tags:
+        - "Authencation"
+      summary: Login User Yang Telah Daftar
+      description: Untuk Masuk Ke dalam Sistem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref : "#/components/schemas/ModelUser"
+            example:
+              Email: "Alkaprasetya17@gmail.com"
+              Password: "alka"
+      responses:
+        201:
+          description: "Success add user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message: 
+                    type: string
+                    example: "Success Login"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/ModelUser"
+              example:
+                code: 201
+                message: success Login
+                data:
+                  
+        500:
+          $ref: "#/components/responses/500"
+  /User:
+    post:
+      tags:
+        - "User"
+      summary: Register User Baru
+      description: Tambah User untuk disimpan ke database
+      parameters:
+        - name: Name
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Dob
+          description: Tanggal Lahir User
+          in: query
+          schema:
+            type: string
+        - name: Gender
+          description: Jenis Kelamin User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Nomor Hp
+          description: Nomor Hp User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref : "#/components/schemas/ModelUser"
+            example:
+              name: "Alka"
+              dob: "1998-10-26"
+              gender: "L"
+              Email: "Alkaprasetya17@gmail.com"
+              nomor hp: "08986817477"
+              Password: "alka"
+      responses:
+        201:
+          description: "Success Register user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message: 
+                    type: string
+                    example: "Success add data"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/ModelUser"
+              example:
+                code: 201
+                message: success Register user
+        500:
+          $ref: "#/components/responses/500"
+
+  /User/{id}:
+    get:
+      tags:
+        - "User"
+      description: Mengambil data user yang berdasarkan id yang ada
+      summary: Ambil data User berdasarkan Id
+      parameters:
+        - name: id
+          description: id user
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: Get Users
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/ModelUser"
+                example:
+                  message: Get Users
+                  data:
+                     name: "Alka"
+                     dob: "1998-10-26"
+                     gender: "L"
+                     Email: "Alkaprasetya17@gmail.com"
+                     nomor hp: "08986817477"
+                     Password: "alka"
+    put:
+      tags:
+        - "User"
+      description: Mengubah Data User berdasarkan id yang ada
+      summary: Ubah data user berdasarkan id
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref : "#/components/schemas/ModelUser"
+            example:
+              name: "Alka"
+              dob: "1998-10-26"
+              gender: "L"
+              Email: "Alkaprasetya17@gmail.com"
+              nomor hp: "08986817477"
+              Password: "alka"
+
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil diupdate
+                  data:
+                    type: object  
+                    $ref: "#/components/schemas/ModelUser" 
+                example:
+                  message: data berhasil diupdate
+                             
+    delete:
+      tags:
+        - "User"
+      description: Menghapus Data User yang sudah tidak digunakan
+      summary: Hapus data user berdasarkan id
+      parameters:
+        - name: id
+          description: id pegawai
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil dihapus
+                  data:
+                    type: object 
+  /Product:
+    get:
+      tags:
+        - "Product"
+      description: Get all Product Yang Sudah ada
+      summary: Get All Product 
+      parameters:
+        - name: Id
+          description: Id Product
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/ListUser"
+                
+          $ref: "#/components/responses/500"  
+    post:
+      tags:
+        - "Product"
+      summary: Tambah Product Baru
+      description: Tambah User untuk disimpan ke database
+      parameters:
+        - name: Nama
+          description: nama Product
+          in: query
+          schema:
+            type: string
+        - name: description
+          description: deskripsi Product
+          in: query
+          schema:
+            type: string
+        - name: price
+          description: Harga Product
+          in: query
+          schema:
+            type: number
+        - name: status
+          description: status Product
+          in: query
+          schema:
+            type: string
+        - name: images
+          description: Gambar Product
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref : "#/components/schemas/ModelUser"
+            example:
+              nama: "Samsung s20"
+              description: "HP sultan terbaik"
+              price: 5000000
+              Status: "Ready"
+              images: "samsung.jpg"
+      responses:
+        201:
+          description: "Success add Product"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message: 
+                    type: string
+                    example: "Success add product"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/ModelUser"
+              example:
+                code: 201
+                message: success add product
+        500:
+          $ref: "#/components/responses/500"
+
+  /Product/{id}:
+    get:
+      tags:
+        - "Product"
+      description: Mengambil data user yang berdasarkan id yang ada
+      summary: Ambil data Product berdasarkan Id
+      parameters:
+        - name: id
+          description: id product
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: found data
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/ModelUser"
+                example:
+                  message: found data
+                  data:
+                      id: 1
+                      nama: "Samsung s20"
+                      description: "HP sultan terbaik"
+                      price: 5000000
+                      Status: "Ready"
+                      images: "samsung.jpg"
+    put:
+      tags:
+        - "Product"
+      description: Mengubah Data Product berdasarkan id yang ada
+      summary: Ubah data Product berdasarkan id
+      parameters:
+        - name: Id
+          description: Id Product
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref : "#/components/schemas/ModelUser"
+            example:
+             nama: "Samsung s20"
+             description: "HP sultan terbaik"
+             price: 5000000
+             Status: "Ready"
+             images: "samsung.jpg"
+
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil diupdate
+                  data:
+                    type: object  
+                    $ref: "#/components/schemas/ModelUser" 
+                example:
+                  message: data berhasil diupdate          
+    delete:
+      tags:
+        - "Product"
+      description: Menghapus Data Product yang sudah tidak digunakan
+      summary: Hapus data product berdasarkan id
+      parameters:
+        - name: id
+          description: id product
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil dihapus
+                  data:
+                    type: object    
+  /Cart:
+    get:
+      tags:
+        - "Cart"
+      description: Get all Cart Yang Sudah ada
+      summary: Get All User Cart
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+        - name: Nama
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/ListUser"
+                
+          $ref: "#/components/responses/500"  
+    post:
+      tags:
+        - "Cart"
+      summary: Tambah User Baru
+      description: Tambah User untuk disimpan ke database
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+        - name: Nama
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref : "#/components/schemas/ModelUser"
+            example:
+              id: "1"
+              nama: "Alka"
+              Email: "Alkaprasetya17@gmail.com"
+              Password: "alka"
+      responses:
+        201:
+          description: "Success add user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message: 
+                    type: string
+                    example: "Success add data"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/ModelUser"
+              example:
+                code: 201
+                message: success insert user
+                data:
+                  id: 1
+                  nama: Alka
+                  email: Alkaprasetya17@gmail.com
+                  password: alka
+        500:
+          $ref: "#/components/responses/500"
+    put:
+      tags:
+        - "Cart"
+      description: Mengubah Data User berdasarkan id yang ada
+      summary: Ubah data user berdasarkan id
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref : "#/components/schemas/ModelUser"
+            example:
+              id: "2"
+              nama: "Budi"
+              Email: "Budiprasetya17@gmail.com"
+              Password: "budi"
+
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil diupdate
+                  data:
+                    type: object  
+                    $ref: "#/components/schemas/ModelUser" 
+                example:
+                  message: data berhasil diupdate
+                  data:
+                    id: 2
+                    nama: Budi
+                    email: Budiprasetya17@gmail.com
+                    password: Budi           
+    delete:
+      tags:
+        - "Cart"
+      description: Menghapus Data User yang sudah tidak digunakan
+      summary: Hapus data user berdasarkan id
+      parameters:
+        - name: id
+          description: id pegawai
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil dihapus
+                  data:
+                    type: object       
+  /Order:
+    get:
+      tags:
+        - "Order"
+      description: Get all Product Yang Sudah ada
+      summary: Get All User Product
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+        - name: Nama
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/ListUser"
+                
+          $ref: "#/components/responses/500"  
+    post:
+      tags:
+        - "Order"
+      summary: Tambah User Baru
+      description: Tambah User untuk disimpan ke database
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+        - name: Nama
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref : "#/components/schemas/ModelUser"
+            example:
+              id: "1"
+              nama: "Alka"
+              Email: "Alkaprasetya17@gmail.com"
+              Password: "alka"
+      responses:
+        201:
+          description: "Success add user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message: 
+                    type: string
+                    example: "Success add data"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/ModelUser"
+              example:
+                code: 201
+                message: success insert user
+                data:
+                  id: 1
+                  nama: Alka
+                  email: Alkaprasetya17@gmail.com
+                  password: alka
+        500:
+          $ref: "#/components/responses/500"         
+components:
+  schemas:
+    ModelUser:
+      type: object
+      properties:
+        nama:
+          type: string
+          example: alka
+        dob:
+          type: string
+          example: "1998-10-26"
+        gender:
+          type: string
+          example: L
+        email:
+          type: string
+          example: Alkaprasetya17@gmail.com
+        nomor hp:
+          type: string
+          example: "08986817477"
+        password:
+          type: string
+          example: alka
+    ListUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nama:
+          type: string
+          example: alka
+        dob:
+          type: string
+          example: "1998-10-26"
+        gender:
+          type: string
+          example: L
+        email:
+          type: string
+          example: Alkaprasetya17@gmail.com
+        nomor hp:
+          type: string
+          example: "08986817477"
+        password:
+          type: string
+          example: alka
+  responses:
+    500:
+      description: "Error from server"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+          example:
+            code: 500
+            message: There is some problem on server
+            data: 
+
+  
