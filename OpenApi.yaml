@@ -203,6 +203,8 @@ paths:
     post:
       tags:
         - "Products"
+      security:
+        - bearerAuth: []
       summary: Tambah Product Baru
       description: Tambah User untuk disimpan ke database
       requestBody:
@@ -210,7 +212,7 @@ paths:
         
       responses:
         201:
-          description: "Success add Product"
+          description: Created
           content:
             application/json:
               schema:
@@ -218,19 +220,19 @@ paths:
                 properties:
                   code:
                     type: integer
-                    example: 1
+                    example: 201
                   message: 
                     type: string
                     example: "Success add product"
                   data:
                     type: object
-                   # $ref: "#/components/schemas/User"
-              example:
-                code: 201
-                message: success add product
+                    $ref: "#/components/schemas/SimpleProductSchema"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        400:
+          $ref: "#/components/responses/400BadRequest"
         500:
           $ref: "#/components/responses/500InternalServerError"
-
   /Product/{id}:
     get:
       tags:
@@ -698,10 +700,13 @@ components:
 
     ProductSchema:
       type: object
+      required:
+        - name
+        - price
+        - stok
+        - user_id
+        - product_category_id
       properties:
-        id:
-          type: integer
-          example: 1
         name:
           type: string
           example: Matchbook M1 Pro
