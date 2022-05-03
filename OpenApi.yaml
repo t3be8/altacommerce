@@ -1,0 +1,937 @@
+openapi: 3.0.3
+info:
+  title: Alta E-Commerce API
+  version: 1.0.1
+  description: File ini digunakan untuk Menampilkan OPEN API Aplikasi Ecommerce
+ 
+tags:
+  - name: Authentication
+  - name: Users
+  - name: Products
+  - name: Carts
+  - name: Orders
+servers:
+  - url: http://localhost:8000/api/{version}
+    description: URL untuk fase development
+    variables:
+      version:
+        default: v1
+        enum:
+          - "v1"
+          - "v2"
+#-------------------------------
+# Authentication (login)
+#-------------------------------
+paths: 
+  /login:
+    post:
+      tags:
+        - "Authentication"
+      summary: user login with credentials
+      description: Untuk login Ke dalam Sistem dengan credentials yang dimiliki
+      requestBody:
+        $ref: '#/components/requestBodies/LoginBody'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message: 
+                    type: string
+                    example: "Success Login"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/SimpleUserSchema"
+                  token:
+                    type: string
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+#-------------------------------
+# Users Section
+#-------------------------------
+# User Register  
+  /users:
+    post:
+      tags:
+        - "Users"
+      summary: Register new user
+      description: Create new user
+      requestBody:
+        $ref: '#/components/requestBodies/UsersBody' 
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message: 
+                    type: string
+                    example: "Success register user"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/UserSchema"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+
+# GetById User
+  /users/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: the user ID
+    get:
+      tags:
+        - "Users"
+      description: Mengambil data user berdasarkan ID yang ada
+      summary: Get a user by ID
+      responses:
+        200:
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: users exist
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/SimpleUserSchema"
+        404:
+          $ref: "#/components/responses/404NotFound"        
+# Update User    
+    put:
+      tags:
+        - "Users"
+      security:
+        - bearerAuth: []
+      description: Mengubah Data User berdasarkan id yang ada
+      summary: Ubah data user berdasarkan id
+      requestBody:
+          $ref : "#/components/requestBodies/UsersBody"
+      responses:
+        200:
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: data berhasil diupdate
+                  data:
+                    type: object  
+                    $ref: "#/components/schemas/UserSchema" 
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        404: 
+          $ref: "#/components/responses/404NotFound"              
+  # Delete user
+    delete:
+      tags:
+        - "Users"
+      security:
+        - bearerAuth: []
+      description: Menghapus Data User yang sudah tidak digunakan
+      summary: Hapus data user berdasarkan user id
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil dihapus
+                  data:
+                    type: object 
+
+#-------------------------------
+# Products Section
+#-------------------------------
+# Get all products
+  /products:
+    get:
+      tags:
+        - "Products"
+      description: Get all data Product 
+      summary: Get all products  
+      parameters:
+        - $ref: "#/components/parameters/pagesParam"
+        - $ref: "#/components/parameters/offsetParam"
+        - $ref: "#/components/parameters/limitParam"
+      responses:
+        200:
+          $ref: "#/components/responses/200OkPaginate"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        404:
+          $ref: "#/components/responses/404NotFound"
+        500:        
+          $ref: "#/components/responses/500InternalServerError"  
+    post:
+      tags:
+        - "Products"
+      summary: Tambah Product Baru
+      description: Tambah User untuk disimpan ke database
+      requestBody:
+        $ref: '#/components/requestBodies/ProductsBody'
+        
+      responses:
+        201:
+          description: "Success add Product"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message: 
+                    type: string
+                    example: "Success add product"
+                  data:
+                    type: object
+                   # $ref: "#/components/schemas/User"
+              example:
+                code: 201
+                message: success add product
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+
+  /Product/{id}:
+    get:
+      tags:
+        - "Product"
+      description: Mengambil data user yang berdasarkan id yang ada
+      summary: Ambil data Product berdasarkan Id
+      parameters:
+        - $ref: "#/components/parameters/offsetParam"
+        - $ref: "#/components/parameters/limitParam"
+      responses:
+        200:
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: found data
+                  data:
+                    type: object 
+                   
+                example:
+                  message: found data
+                  data:
+                      id: 1
+                      nama: "Samsung s20"
+                      description: "HP sultan terbaik"
+                      price: 5000000
+                      Status: "Ready"
+                      images: "samsung.jpg"
+    put:
+      tags:
+        - "Product"
+      description: Mengubah Data Product berdasarkan id yang ada
+      summary: Ubah data Product berdasarkan id
+      parameters:
+        - name: Id
+          description: Id Product
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+             # $ref : "#/components/schemas/User"
+            example:
+             nama: "Samsung s20"
+             description: "HP sultan terbaik"
+             price: 5000000
+             Status: "Ready"
+             images: "samsung.jpg"
+
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil diupdate
+                  data:
+                    type: object  
+                  #  $ref: "#/components/schemas/User" 
+                example:
+                  message: data berhasil diupdate          
+    delete:
+      tags:
+        - "Product"
+      description: Menghapus Data Product yang sudah tidak digunakan
+      summary: Hapus data product berdasarkan id
+      parameters:
+        - name: id
+          description: id product
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil dihapus
+                  data:
+                    type: object    
+  /Cart:
+    get:
+      tags:
+        - "Cart"
+      description: Get all Cart Yang Sudah ada
+      summary: Get All User Cart
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+        - name: Nama
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/ListUser"
+                
+          $ref: "#/components/responses/500InternalServerError"  
+    post:
+      tags:
+        - "Cart"
+      summary: Tambah User Baru
+      description: Tambah User untuk disimpan ke database
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+        - name: Nama
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            #  $ref : "#/components/schemas/User"
+            example:
+              id: "1"
+              nama: "Alka"
+              Email: "Alkaprasetya17@gmail.com"
+              Password: "alka"
+      responses:
+        201:
+          description: "Success add user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1
+                  message: 
+                    type: string
+                    example: "Success add data"
+                  data:
+                    type: object
+                 #   $ref: "#/components/schemas/User"
+              example:
+                code: 201
+                message: success insert user
+                data:
+                  id: 1
+                  nama: Alka
+                  email: Alkaprasetya17@gmail.com
+                  password: alka
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+    put:
+      tags:
+        - "Cart"
+      description: Mengubah Data User berdasarkan id yang ada
+      summary: Ubah data user berdasarkan id
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            #  $ref : "#/components/schemas/User"
+            example:
+              id: "2"
+              nama: "Budi"
+              Email: "Budiprasetya17@gmail.com"
+              Password: "budi"
+
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil diupdate
+                  data:
+                    type: object  
+                 #   $ref: "#/components/schemas/User" 
+                example:
+                  message: data berhasil diupdate
+                  data:
+                    id: 2
+                    nama: Budi
+                    email: Budiprasetya17@gmail.com
+                    password: Budi           
+    delete:
+      tags:
+        - "Cart"
+      description: Menghapus Data User yang sudah tidak digunakan
+      summary: Hapus data user berdasarkan id
+      parameters:
+        - name: id
+          description: id pegawai
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                    example: data berhasil dihapus
+                  data:
+                    type: object       
+  /Order:
+    get:
+      tags:
+        - "Order"
+      description: Get all Product Yang Sudah ada
+      summary: Get All User Product
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+        - name: Nama
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Success Request"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/ListUser"
+                
+          $ref: "#/components/responses/500InternalServerError"  
+    post:
+      tags:
+        - "Order"
+      summary: Tambah User Baru
+      description: Tambah User untuk disimpan ke database
+      parameters:
+        - name: Id
+          description: Id User
+          in: query
+          schema:
+            type: integer
+        - name: Nama
+          description: nama User
+          in: query
+          schema:
+            type: string
+        - name: Email
+          description: Email User
+          in: query
+          schema:
+            type: string
+        - name: Password
+          description: Password User
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              #$ref : "#/components/schemas/User"
+            example:
+              id: "1"
+              nama: "Alka"
+              email: "Alkaprasetya17@gmail.com"
+      responses:
+        201:
+          description: "Success add user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message: 
+                    type: string
+                    example: "Success add data"
+                  data:
+                    type: object
+                  #  $ref: "#/components/schemas/User"
+              example:
+                code: 201
+                message: success insert user
+                data:
+                  id: 1
+                  nama: Alka
+                  email: Alkaprasetya17@gmail.com
+                  password: alka
+        500:
+          $ref: "#/components/responses/500InternalServerError"         
+components:
+  #-------------------------------
+  # Reusable security schemes
+  #-------------------------------
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  #-------------------------------
+  # Reusable schemas (data models)
+  #-------------------------------
+  schemas:
+    LoginSchema:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: gadipuranto@gmail.com
+        password:
+          type: string
+          example: admin1234
+
+    SimpleUserSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Galang Adi Puranto
+        email:
+          type: string
+          example: gadipuranto@gmail.com
+        hp:
+          type: string
+          example: "08986817477"
+
+    ListProductSchema:
+      type: array
+      items:
+        $ref: '#/components/schemas/SimpleProductSchema'
+
+    SimpleProductSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Matchbook M1 Pro
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi luctus congue viverra. Nulla tempus a nibh egestas dapibus. Donec feugiat arcu ut metus faucibus, eget fringilla erat mattis. 
+        price:
+          type: number
+          format: double
+          example: 16000000
+        stok:
+          type: integer
+          example: 25
+        images:
+          type: string
+          format: binary
+          example: http://localhost:8001/images/demo.png
+        user_id:
+          type: integer
+          example: 1
+
+    ProductSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Matchbook M1 Pro
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi luctus congue viverra. Nulla tempus a nibh egestas dapibus. Donec feugiat arcu ut metus faucibus, eget fringilla erat mattis. 
+        price:
+          type: number
+          format: double
+          example: 16000000
+        stok:
+          type: integer
+          example: 25
+        images:
+          type: string
+          format: binary
+        product_category_id:
+          type: integer
+          example: 2
+        user_id:
+          type: integer
+          example: 1
+
+    UserSchema:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: Galang Adi Puranto
+        dob:
+          type: string
+          example: "1999-10-13"
+        gender:
+          type: string
+          example: L
+        email:
+          type: string
+          example: gadipuranto@gmail.com
+        hp:
+          type: string
+          example: "08986817477"
+        password:
+          type: string
+          example: admin1234
+        
+#-------------------------------
+# Reusable operation parameters
+#-------------------------------
+  parameters:
+    pagesParam:      # Can be referenced via '#/components/parameters/pagesParam'
+      name: page
+      in: query
+      description: Number of start pages.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        default: 1
+
+    offsetParam:      # Can be referenced via '#/components/parameters/offsetParam'
+      name: offset
+      in: query
+      description: Number of items to skip before returning the results.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+
+    limitParam:       # Can be referenced as '#/components/parameters/limitParam'
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 10
+
+#-------------------------------
+# Reusable request bodies
+#-------------------------------
+  requestBodies:
+    LoginBody:
+      description: A JSON object containing login information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginSchema'
+    UsersBody:
+      description: A JSON object containing users information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserSchema'
+    ProductsBody:
+      description: A JSON object containing products information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductSchema'
+#-------------------------------
+# Reusable responses
+#-------------------------------
+  responses:
+    200OkPaginate:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              message: 
+                type: string
+                example: Ok
+              total:
+                type: integer #total items 50
+                example: 40
+              per_page:
+                type: integer #limit 15
+                example: 10
+              current_page:
+                type: integer #1
+                example: 1
+              last_page:
+                type: integer #4
+                example: 4
+              first_page_url:
+                type: string #http://localhost:8000?page=1
+                example: http://localhost:8000?page=1
+              last_page_url:
+                type: string
+                example: http://localhost:8000?page=4
+              next_page_url:
+                type: string
+                example: http://localhost:8000?page=2
+              prev_page_url:
+                type: string
+                default: 
+              from:
+                type: integer #offset
+                example: 1
+              to:
+                type: integer #limit
+                example: 10
+              data:
+                type: object
+                $ref: "#/components/schemas/ListProductSchema"
+           
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+          example:
+            code: 400
+            message: Bad Request
+            data: 
+    401UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+          example:
+            code: 401
+            message: Access token is missing or invalid
+            data:
+    404NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+          example:
+            code: 404
+            message: Not Found
+            data:
+    500InternalServerError:
+      description: "Error from server"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message: 
+                type: string
+              data:
+                type: object
+          example:
+            code: 500
+            message: There is some problem on server
+            data: 
+
+  
