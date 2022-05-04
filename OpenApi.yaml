@@ -182,15 +182,31 @@ paths:
 #-------------------------------
 # Get all products
   /products:
-    get:
-      tags:
-        - "Products"
-      description: Get all data Product 
-      summary: Get all products  
-      parameters:
+    parameters:
         - $ref: "#/components/parameters/pagesParam"
         - $ref: "#/components/parameters/offsetParam"
         - $ref: "#/components/parameters/limitParam"
+    get:
+      tags:
+        - "Products"  
+      description: Get all data Product 
+      summary: Get all products  
+      responses:
+        200:
+          $ref: "#/components/responses/200OkPaginate"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        404:
+          $ref: "#/components/responses/404NotFound"
+        500:        
+          $ref: "#/components/responses/500InternalServerError"
+    get:
+      parameters:
+
+      tags:
+        - "Products"  
+      description: Get all data Product 
+      summary: Get all products  
       responses:
         200:
           $ref: "#/components/responses/200OkPaginate"
@@ -200,12 +216,14 @@ paths:
           $ref: "#/components/responses/404NotFound"
         500:        
           $ref: "#/components/responses/500InternalServerError"  
+    
+    #Create new products
     post:
       tags:
         - "Products"
       security:
         - bearerAuth: []
-      summary: Tambah Product Baru
+      summary: Tambah product Baru
       description: Tambah User untuk disimpan ke database
       requestBody:
         $ref: '#/components/requestBodies/ProductsBody'
@@ -233,15 +251,22 @@ paths:
           $ref: "#/components/responses/400BadRequest"
         500:
           $ref: "#/components/responses/500InternalServerError"
-  /Product/{id}:
+  
+  #GetById Products
+  /products/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: the user ID
     get:
       tags:
-        - "Product"
+        - "Products"
       description: Mengambil data user yang berdasarkan id yang ada
-      summary: Ambil data Product berdasarkan Id
-      parameters:
-        - $ref: "#/components/parameters/offsetParam"
-        - $ref: "#/components/parameters/limitParam"
+      summary: Ambil data Product berdasarkan product ID
       responses:
         200:
           description: OK
@@ -252,48 +277,27 @@ paths:
                 properties:
                   code:
                     type: integer
+                    example: 200
                   message:
                     type: string
-                    example: found data
+                    example: data exist
                   data:
-                    type: object 
-                   
-                example:
-                  message: found data
-                  data:
-                      id: 1
-                      nama: "Samsung s20"
-                      description: "HP sultan terbaik"
-                      price: 5000000
-                      Status: "Ready"
-                      images: "samsung.jpg"
+                    type: object
+                    $ref: "#/components/schemas/SimpleProductSchema"
+        404:
+          $ref: "#/components/responses/404NotFound"
     put:
       tags:
-        - "Product"
-      description: Mengubah Data Product berdasarkan id yang ada
-      summary: Ubah data Product berdasarkan id
-      parameters:
-        - name: Id
-          description: Id Product
-          in: query
-          schema:
-            type: integer
+        - "Products"
+      security:
+        - bearerAuth: []
+      description: Mengubah Data Product berdasarkan product ID yang ada
+      summary: Ubah data Product berdasarkan product ID
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-             # $ref : "#/components/schemas/User"
-            example:
-             nama: "Samsung s20"
-             description: "HP sultan terbaik"
-             price: 5000000
-             Status: "Ready"
-             images: "samsung.jpg"
-
+        $ref: "#/components/requestBodies/ProductsBody"
       responses:
         200:
-          description: "Success Request"
+          description: OK
           content:
             "application/json":
               schema:
@@ -301,29 +305,29 @@ paths:
                 properties:
                   code:
                     type: integer
+                    example: 200
                   message:
                     type: string
                     example: data berhasil diupdate
                   data:
                     type: object  
-                  #  $ref: "#/components/schemas/User" 
-                example:
-                  message: data berhasil diupdate          
+                    $ref: "#/components/schemas/ProductSchema" 
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+        500:
+          $ref: "#/components/responses/500InternalServerError"                  
     delete:
       tags:
-        - "Product"
-      description: Menghapus Data Product yang sudah tidak digunakan
-      summary: Hapus data product berdasarkan id
-      parameters:
-        - name: id
-          description: id product
-          in: path
-          required: true
-          schema:
-            type: integer
+        - "Products"
+      security:
+        - bearerAuth: []
+      description: Menghapus Data product sesuai product ID
+      summary: Hapus data product berdasarkan product ID
       responses:
         200:
-          description: "Success Request"
+          description: OK
           content:
             "application/json":
               schema:
@@ -331,11 +335,17 @@ paths:
                 properties:
                   code:
                     type: integer
+                    example: 200
                   message:
                     type: string
                     example: data berhasil dihapus
                   data:
-                    type: object    
+                    type: object
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        401:
+          $ref: "#/components/responses/401UnauthorizedError"
+
   /Cart:
     get:
       tags:
