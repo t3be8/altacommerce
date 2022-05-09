@@ -199,13 +199,9 @@ paths:
         404:
           $ref: "#/components/responses/404NotFound"
         500:        
-<<<<<<< HEAD
-          $ref: "#/components/responses/500InternalServerError"
-=======
           $ref: "#/components/responses/500InternalServerError"  
     
     #Create new products
->>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
     post:
       tags:
         - "Products"
@@ -240,7 +236,7 @@ paths:
         500:
           $ref: "#/components/responses/500InternalServerError"
   
-  /products/{categoryId}:
+  /categories/{categoryId}/products:
     parameters:
       - in: path
         name: categoryId
@@ -358,11 +354,7 @@ paths:
         401:
           $ref: "#/components/responses/401UnauthorizedError"
 
-<<<<<<< HEAD
   /carts:
-=======
-  /Carts:
->>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
     get:
       tags:
         - "Carts"
@@ -414,10 +406,6 @@ paths:
     post:
       tags:
         - "Carts"
-<<<<<<< HEAD
-      summary: Tambah User Baru
-      description: Tambah User untuk disimpan ke database
-=======
       summary: Tambah Product Ke Carts
       description: Tambah Produk Untuk Dimasukkan ke Carts
       parameters:
@@ -446,7 +434,6 @@ paths:
           in: query
           schema:
             type: string
->>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
       requestBody:
         content:
           application/json:
@@ -487,13 +474,8 @@ paths:
     put:
       tags:
         - "Carts"
-<<<<<<< HEAD
-      description: Mengubah Data User berdasarkan id yang ada
-      summary: Ubah data user berdasarkan id
-=======
       description: Mengubah Data Cart Berdasarkan User id
       summary: Ubah data cart berdasarkan user id
->>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
       parameters:
         - name: User
           description: user_id
@@ -536,13 +518,8 @@ paths:
     delete:
       tags:
         - "Carts"
-<<<<<<< HEAD
-      description: Menghapus Data User yang sudah tidak digunakan
-      summary: Hapus data user berdasarkan id
-=======
       description: Menghapus Data Cart Yang Tidak Terpakai
       summary: Hapus data cart berdasarkan user id
->>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
       parameters:
         - name: User
           description: user_id
@@ -1033,6 +1010,4 @@ components:
           example:
             code: 500
             message: There is some problem on server
-            data: 
-
-  
+            data:

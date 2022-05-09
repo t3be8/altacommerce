@@ -22,7 +22,7 @@ func main() {
 	}
 	fmt.Println(version)
 
-	defer res.Close()
+	//defer res.Close()
 	// e := echo.New()
 	// log.Fatal(e.Start(fmt.Sprintf(":%d", conf.Port)))
 }
