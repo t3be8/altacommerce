@@ -18,9 +18,9 @@ type AppConfig struct {
 }
 
 func InitConfig() *AppConfig {
-	var app *AppConfig
+	//var app *AppConfig
 
-	app = GetConfig()
+	app := GetConfig()
 	if app == nil {
 		log.Fatal("Cannot init config")
 		return nil
