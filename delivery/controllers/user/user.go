@@ -75,7 +75,7 @@ func (uc *UserController) Login() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, user.BadRequest())
 		}
 
-		data, match, err := uc.Repo.IsLogin(c.Request().Context(), param.Email, param.Password)
+		data, match, err := uc.Repo.IsLogin(param.Email, param.Password)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
@@ -116,10 +116,4 @@ func ExtractTokenUserId(e echo.Context) float64 {
 		return userId
 	}
 	return 0
-}
-
-func GeneratePasswordHash(c echo.Context) error {
-	pwd := c.Param("password")
-	hash, _ := utils.HashPassword(pwd)
-	return c.JSON(http.StatusOK, hash)
 }

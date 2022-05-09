@@ -1,14 +1,14 @@
 package config
 
 import (
-	"database/sql"
 	"fmt"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/gommon/log"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-func InitDB(config AppConfig) *sql.DB {
+func InitDB(config AppConfig) *gorm.DB {
 
 	conString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True",
 		config.User,
@@ -18,12 +18,10 @@ func InitDB(config AppConfig) *sql.DB {
 		config.DBName,
 	)
 
-	db, err := sql.Open("mysql", conString)
+	db, err := gorm.Open(mysql.Open(conString), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
-	// defer db.Close()
 
 	return db
 }

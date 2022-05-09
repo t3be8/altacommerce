@@ -3,26 +3,27 @@ package main
 import (
 	"fmt"
 
-	// "github.com/labstack/echo/v4"
+	"github.com/go-playground/validator/v10"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"github.com/t3be8/altacommerce/config"
+	userController "github.com/t3be8/altacommerce/delivery/controllers/user"
+	"github.com/t3be8/altacommerce/delivery/routes"
+	"github.com/t3be8/altacommerce/entity"
+	userRepo "github.com/t3be8/altacommerce/repository/user"
 )
 
 func main() {
 	// setup configuration
 	conf := config.InitConfig()
 	db := config.InitDB(*conf)
+	db.AutoMigrate(entity.Address{})
+	db.AutoMigrate(entity.User{})
+	e := echo.New()
 
-	defer db.Close()
+	repoUser := userRepo.New(db)
 
-	var version string
-	res := db.QueryRow("select version()").Scan(&version)
-	if res != nil {
-		log.Fatal(res)
-	}
-	fmt.Println(version)
-
-	defer res.Close()
-	// e := echo.New()
-	// log.Fatal(e.Start(fmt.Sprintf(":%d", conf.Port)))
+	controllerUser := userController.New(repoUser, validator.New())
+	routes.RegisterPath(e, controllerUser)
+	log.Fatal(e.Start(fmt.Sprintf(":%d", conf.Port)))
 }

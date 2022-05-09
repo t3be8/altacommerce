@@ -1,43 +1,37 @@
 package user
 
 import (
-	"context"
-	"database/sql"
+	"errors"
 
 	"github.com/labstack/gommon/log"
 	"github.com/t3be8/altacommerce/entity"
 	"github.com/t3be8/altacommerce/utils"
+	"gorm.io/gorm"
 )
 
-func New(db *sql.DB) *UserRepo {
+func New(db *gorm.DB) *UserRepo {
 	return &UserRepo{
 		Db: db,
 	}
 }
 
 type UserRepo struct {
-	Db *sql.DB
+	Db *gorm.DB
 }
 
 // Check users islogin with payload
-func (ur *UserRepo) IsLogin(ctx context.Context, email, password string) (entity.User, bool, error) {
+func (ur *UserRepo) IsLogin(email, password string) (entity.User, bool, error) {
 	var u entity.User
 	var pwd string
 
-	state := "SELECT * FROM users WHERE email = ?"
-	err := ur.Db.QueryRowContext(ctx, state, email).Scan(
-		&u.ID, &u.Email, &pwd,
-	)
+	query := "SELECT id, name, email, password FROM users WHERE email = ?"
 
-	if err == sql.ErrNoRows {
-		log.Warn("email not found")
-		return u, false, err
+	if err := ur.Db.Raw(query, email).Scan(&u).Error; err != nil {
+		log.Warn(err)
+		return u, false, errors.New("tidak dapat select data")
 	}
 
-	if err != nil {
-		log.Warn("Query error")
-		return u, false, err
-	}
+	pwd = u.Password
 
 	match, err := utils.CheckPasswordHash(password, pwd)
 	if !match {
@@ -50,13 +44,9 @@ func (ur *UserRepo) IsLogin(ctx context.Context, email, password string) (entity
 }
 
 func (ur *UserRepo) Register(newUser entity.User) (entity.User, error) {
-	var u entity.User
-	query, err := ur.Db.Prepare("INSERT INTO users(name, email, phone, password) VALUES(?,?,?,?)")
-	query.Exec(newUser.Name, newUser.Email, newUser.Phone, newUser.Password)
-	if err != nil {
-		log.Warn("Query error")
-		return u, err
+	if err := ur.Db.Create(&newUser).Error; err != nil {
+		return entity.User{}, errors.New("tidak dapat insert data")
 	}
 	log.Info("insert succes!")
-	return u, nil
+	return newUser, nil
 }

@@ -2,30 +2,24 @@ package entity
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
-	ID        uint
-	Name      string
+	gorm.Model
+	Name      string `gorm:"type:varchar(255)"`
 	Dob       *time.Time
 	Gender    string
 	Email     string
 	Phone     *string
 	Password  string
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
 	Addresses []Address
 }
 
-func (User) TableName() string {
-	return "users"
-}
-
 type Address struct {
-	ID        uint
-	Address   string
-	KodePos   int
-	UserID    uint
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
+	gorm.Model
+	Address string
+	KodePos int
+	UserID  uint
 }
