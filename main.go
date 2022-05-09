@@ -16,11 +16,13 @@ func main() {
 	defer db.Close()
 
 	var version string
-	err := db.QueryRow("select version()").Scan(&version)
-	if err != nil {
-		log.Fatal(err)
+	res := db.QueryRow("select version()").Scan(&version)
+	if res != nil {
+		log.Fatal(res)
 	}
 	fmt.Println(version)
+
+	defer res.Close()
 	// e := echo.New()
 	// log.Fatal(e.Start(fmt.Sprintf(":%d", conf.Port)))
 }

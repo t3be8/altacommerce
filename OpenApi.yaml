@@ -199,7 +199,13 @@ paths:
         404:
           $ref: "#/components/responses/404NotFound"
         500:        
+<<<<<<< HEAD
           $ref: "#/components/responses/500InternalServerError"
+=======
+          $ref: "#/components/responses/500InternalServerError"  
+    
+    #Create new products
+>>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
     post:
       tags:
         - "Products"
@@ -352,30 +358,39 @@ paths:
         401:
           $ref: "#/components/responses/401UnauthorizedError"
 
+<<<<<<< HEAD
   /carts:
+=======
+  /Carts:
+>>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
     get:
       tags:
         - "Carts"
       description: Get all Cart Yang Sudah ada
       summary: Get All User Cart
       parameters:
-        - name: Id
-          description: Id User
+        - name: User
+          description: User Id
           in: query
           schema:
             type: integer
-        - name: Nama
-          description: nama User
+        - name: Product
+          description: product id
           in: query
           schema:
             type: string
-        - name: Email
-          description: Email User
+        - name: Total
+          description: Total Harga
           in: query
           schema:
             type: string
-        - name: Password
-          description: Password User
+        - name: Qty
+          description: Berapa Qty
+          in: query
+          schema:
+            type: string
+        - name: Status
+          description: Status Cart
           in: query
           schema:
             type: string
@@ -393,14 +408,45 @@ paths:
                     type: string
                   data:
                     type: object 
-                    $ref: "#/components/schemas/ListUser"
+                    $ref: "#/components/schemas/CartSchema"
                 
           $ref: "#/components/responses/500InternalServerError"  
     post:
       tags:
         - "Carts"
+<<<<<<< HEAD
       summary: Tambah User Baru
       description: Tambah User untuk disimpan ke database
+=======
+      summary: Tambah Product Ke Carts
+      description: Tambah Produk Untuk Dimasukkan ke Carts
+      parameters:
+        - name: User
+          description: User Id
+          in: query
+          schema:
+            type: integer
+        - name: Product
+          description: product id
+          in: query
+          schema:
+            type: string
+        - name: Total
+          description: Total Harga
+          in: query
+          schema:
+            type: string
+        - name: Qty
+          description: Berapa Qty
+          in: query
+          schema:
+            type: string
+        - name: Status
+          description: Status Cart
+          in: query
+          schema:
+            type: string
+>>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
       requestBody:
         content:
           application/json:
@@ -408,10 +454,11 @@ paths:
               type: object
             #  $ref : "#/components/schemas/User"
             example:
-              id: "1"
-              nama: "Alka"
-              Email: "Alkaprasetya17@gmail.com"
-              Password: "alka"
+              user_id: "1"
+              product_id: "2"
+              total: "20000"
+              qty: "10"
+              status: "ready"
       responses:
         201:
           description: "Success add user"
@@ -425,18 +472,14 @@ paths:
                     example: 1
                   message: 
                     type: string
-                    example: "Success add data"
+                    example: "Success add cart"
                   data:
                     type: object
                  #   $ref: "#/components/schemas/User"
               example:
                 code: 201
-                message: success insert user
-                data:
-                  id: 1
-                  nama: Alka
-                  email: Alkaprasetya17@gmail.com
-                  password: alka
+                message: success insert cart
+                
         500:
           $ref: "#/components/responses/500InternalServerError"
   
@@ -444,11 +487,16 @@ paths:
     put:
       tags:
         - "Carts"
+<<<<<<< HEAD
       description: Mengubah Data User berdasarkan id yang ada
       summary: Ubah data user berdasarkan id
+=======
+      description: Mengubah Data Cart Berdasarkan User id
+      summary: Ubah data cart berdasarkan user id
+>>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
       parameters:
-        - name: Id
-          description: Id User
+        - name: User
+          description: user_id
           in: query
           schema:
             type: integer
@@ -459,10 +507,11 @@ paths:
               type: object
             #  $ref : "#/components/schemas/User"
             example:
-              id: "2"
-              nama: "Budi"
-              Email: "Budiprasetya17@gmail.com"
-              Password: "budi"
+              user_id: "1"
+              product_id: "2"
+              total: "70000"
+              qty: "10"
+              status: "ready" 
 
       responses:
         200:
@@ -482,19 +531,21 @@ paths:
                  #   $ref: "#/components/schemas/User" 
                 example:
                   message: data berhasil diupdate
-                  data:
-                    id: 2
-                    nama: Budi
-                    email: Budiprasetya17@gmail.com
-                    password: Budi           
+                  
+                               
     delete:
       tags:
         - "Carts"
+<<<<<<< HEAD
       description: Menghapus Data User yang sudah tidak digunakan
       summary: Hapus data user berdasarkan id
+=======
+      description: Menghapus Data Cart Yang Tidak Terpakai
+      summary: Hapus data cart berdasarkan user id
+>>>>>>> f5869676e60bb765c2b8a1aed21c926d85f1cb81
       parameters:
-        - name: id
-          description: id pegawai
+        - name: User
+          description: user_id
           in: path
           required: true
           schema:
@@ -514,30 +565,35 @@ paths:
                     example: data berhasil dihapus
                   data:
                     type: object       
-  /Order:
+  /Orders:
     get:
       tags:
-        - "Order"
-      description: Get all Product Yang Sudah ada
-      summary: Get All User Product
+        - "Orders"
+      description: Get all Cart Yang sudah Transaksi
+      summary: Get All Orders Carts
       parameters:
-        - name: Id
-          description: Id User
+        - name: User
+          description: User Id
           in: query
           schema:
             type: integer
-        - name: Nama
-          description: nama User
+        - name: Product
+          description: product id
           in: query
           schema:
             type: string
-        - name: Email
-          description: Email User
+        - name: Total
+          description: Total Harga
           in: query
           schema:
             type: string
-        - name: Password
-          description: Password User
+        - name: Qty
+          description: Berapa Qty
+          in: query
+          schema:
+            type: string
+        - name: Status
+          description: Status Orders
           in: query
           schema:
             type: string
@@ -560,27 +616,32 @@ paths:
           $ref: "#/components/responses/500InternalServerError"  
     post:
       tags:
-        - "Order"
-      summary: Tambah User Baru
-      description: Tambah User untuk disimpan ke database
+        - "Orders"
+      summary: Menambah Orders Baru
+      description: Tambah Orders yang sudah ada di carts
       parameters:
-        - name: Id
-          description: Id User
+        - name: User
+          description: User Id
           in: query
           schema:
             type: integer
-        - name: Nama
-          description: nama User
+        - name: Product
+          description: product id
           in: query
           schema:
             type: string
-        - name: Email
-          description: Email User
+        - name: Total
+          description: Total Harga
           in: query
           schema:
             type: string
-        - name: Password
-          description: Password User
+        - name: Qty
+          description: Berapa Qty
+          in: query
+          schema:
+            type: string
+        - name: Status
+          description: Status Orders
           in: query
           schema:
             type: string
@@ -591,12 +652,14 @@ paths:
               type: object
               #$ref : "#/components/schemas/User"
             example:
-              id: "1"
-              nama: "Alka"
-              email: "Alkaprasetya17@gmail.com"
+              user_id: "1"
+              product_id: "2"
+              total: "70000"
+              qty: "10"
+              status: "ready"
       responses:
         201:
-          description: "Success add user"
+          description: "Success add order"
           content:
             application/json:
               schema:
@@ -607,18 +670,13 @@ paths:
                     example: 201
                   message: 
                     type: string
-                    example: "Success add data"
+                    example: "Success add order"
                   data:
                     type: object
                   #  $ref: "#/components/schemas/User"
               example:
                 code: 201
-                message: success insert user
-                data:
-                  id: 1
-                  nama: Alka
-                  email: Alkaprasetya17@gmail.com
-                  password: alka
+                message: success insert orders
         500:
           $ref: "#/components/responses/500InternalServerError"         
 components:
@@ -663,6 +721,47 @@ components:
           type: string
           example: "08986817477"
 
+    CartSchema:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 2
+        total_price:
+          type: number
+          format: double
+          example: 16000000
+        total_qty:
+          type: integer
+          example: 25
+        status:
+          type: string
+          example: "ready"
+          
+    OrderSchema:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 2
+        total_price:
+          type: number
+          format: double
+          example: 16000000
+        total_qty:
+          type: integer
+          example: 25
+        status:
+          type: string
+          example: "ready"
+          
+    
     ListProductSchema:
       type: array
       items:
