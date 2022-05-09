@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/gommon/log"
 	view "github.com/t3be8/altacommerce/delivery/views"
 	"github.com/t3be8/altacommerce/delivery/views/user"
+	"github.com/t3be8/altacommerce/entity"
 	userRepo "github.com/t3be8/altacommerce/repository/user"
 	"github.com/t3be8/altacommerce/utils"
 )
@@ -30,10 +31,34 @@ func (uc *UserController) Register() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var tmpUser user.RegisterRequest
 
-		if err := c.Bind(&tmpUser){
-			
+		if err := c.Bind(&tmpUser); err != nil {
+			log.Warn("salah input")
+			return c.JSON(http.StatusBadRequest, user.BadRequest())
 		}
-	}	
+
+		if err := uc.Valid.Struct(tmpUser); err != nil {
+			log.Warn(err.Error())
+			return c.JSON(http.StatusBadRequest, user.BadRequest())
+		}
+
+		pwd := tmpUser.Password
+		hash, _ := utils.HashPassword(pwd)
+
+		newUser := entity.User{
+			Name:     tmpUser.Name,
+			Email:    tmpUser.Email,
+			Phone:    &tmpUser.Phone,
+			Password: hash,
+		}
+		res, err := uc.Repo.Register(newUser)
+		if err != nil {
+			log.Warn("masalah pada server")
+			return c.JSON(http.StatusInternalServerError, view.InternalServerError())
+		}
+
+		log.Info("berhasil register")
+		return c.JSON(http.StatusCreated, user.SuccessInsert(res))
+	}
 }
 
 func (uc *UserController) Login() echo.HandlerFunc {
