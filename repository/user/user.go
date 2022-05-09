@@ -51,14 +51,12 @@ func (ur *UserRepo) IsLogin(ctx context.Context, email, password string) (entity
 
 func (ur *UserRepo) Register(newUser entity.User) (entity.User, error) {
 	var u entity.User
-	query := "INSERT INTO users(name, email, phone, password) VALUES(?,?,?,?)"
-
-	rows, err := ur.Db.Query(query, newUser.Name, newUser.Email, newUser.Phone, newUser.Password)
+	query, err := ur.Db.Prepare("INSERT INTO users(name, email, phone, password) VALUES(?,?,?,?)")
+	query.Exec(newUser.Name, newUser.Email, newUser.Phone, newUser.Password)
 	if err != nil {
 		log.Warn("Query error")
 		return u, err
 	}
-	defer rows.Close()
-
+	log.Info("insert succes!")
 	return u, nil
 }
