@@ -200,24 +200,6 @@ paths:
           $ref: "#/components/responses/404NotFound"
         500:        
           $ref: "#/components/responses/500InternalServerError"
-    get:
-      parameters:
-
-      tags:
-        - "Products"  
-      description: Get all data Product 
-      summary: Get all products  
-      responses:
-        200:
-          $ref: "#/components/responses/200OkPaginate"
-        400:
-          $ref: "#/components/responses/400BadRequest"
-        404:
-          $ref: "#/components/responses/404NotFound"
-        500:        
-          $ref: "#/components/responses/500InternalServerError"  
-    
-    #Create new products
     post:
       tags:
         - "Products"
@@ -252,6 +234,30 @@ paths:
         500:
           $ref: "#/components/responses/500InternalServerError"
   
+  /products/{categoryId}:
+    parameters:
+      - in: path
+        name: categoryId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+        description: the category ID
+    get:
+      tags:
+        - "Products"  
+      description: Get all data Product berdasarkan produk kategori 
+      summary: Get all products by product_category_id
+      responses:
+        200:
+          $ref: "#/components/responses/200OkPaginate"
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        404:
+          $ref: "#/components/responses/404NotFound"
+        500:        
+          $ref: "#/components/responses/500InternalServerError" 
+
   #GetById Products
   /products/{id}:
     parameters:
@@ -346,10 +352,10 @@ paths:
         401:
           $ref: "#/components/responses/401UnauthorizedError"
 
-  /Cart:
+  /carts:
     get:
       tags:
-        - "Cart"
+        - "Carts"
       description: Get all Cart Yang Sudah ada
       summary: Get All User Cart
       parameters:
@@ -392,30 +398,9 @@ paths:
           $ref: "#/components/responses/500InternalServerError"  
     post:
       tags:
-        - "Cart"
+        - "Carts"
       summary: Tambah User Baru
       description: Tambah User untuk disimpan ke database
-      parameters:
-        - name: Id
-          description: Id User
-          in: query
-          schema:
-            type: integer
-        - name: Nama
-          description: nama User
-          in: query
-          schema:
-            type: string
-        - name: Email
-          description: Email User
-          in: query
-          schema:
-            type: string
-        - name: Password
-          description: Password User
-          in: query
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -454,9 +439,11 @@ paths:
                   password: alka
         500:
           $ref: "#/components/responses/500InternalServerError"
+  
+  /carts/{id}:
     put:
       tags:
-        - "Cart"
+        - "Carts"
       description: Mengubah Data User berdasarkan id yang ada
       summary: Ubah data user berdasarkan id
       parameters:
@@ -502,7 +489,7 @@ paths:
                     password: Budi           
     delete:
       tags:
-        - "Cart"
+        - "Carts"
       description: Menghapus Data User yang sudah tidak digunakan
       summary: Hapus data user berdasarkan id
       parameters:
