@@ -58,7 +58,7 @@ paths:
 # Users Section
 #-------------------------------
 # User Register  
-  /users:
+  /register:
     post:
       tags:
         - "Users"

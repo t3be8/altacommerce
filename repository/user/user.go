@@ -24,11 +24,11 @@ func (ur *UserRepo) IsLogin(email, password string) (entity.User, bool, error) {
 	var u entity.User
 	var pwd string
 
-	query := "SELECT id, name, email, password FROM users WHERE email = ?"
+	query := "SELECT id, name, email FROM users WHERE email = ?"
 
 	if err := ur.Db.Raw(query, email).Scan(&u).Error; err != nil {
 		log.Warn(err)
-		return u, false, errors.New("tidak dapat select data")
+		return entity.User{}, false, errors.New("tidak dapat select data")
 	}
 
 	pwd = u.Password
