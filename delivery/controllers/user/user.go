@@ -77,14 +77,14 @@ func (uc *UserController) Login() echo.HandlerFunc {
 
 		data, match, err := uc.Repo.IsLogin(param.Email, param.Password)
 
+		if !match {
+			return echo.ErrUnauthorized
+		}
+
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"messages": err.Error(),
 			})
-		}
-
-		if !match {
-			return echo.ErrUnauthorized
 		}
 
 		res := user.LoginResponse{Data: data}
