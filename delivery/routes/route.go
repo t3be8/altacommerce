@@ -19,6 +19,8 @@ func ProductPath(e *echo.Echo, pc product.IProductController) {
 
 	e.POST("/product", pc.InsertProduct())
 	e.GET("/product", pc.SelectProduct())
+	e.GET("/product/{id}", pc.GetAllProductById())
+	e.GET("/categories/{categoryId}/product", pc.GetAllProductByCategory())
 	e.PUT("/product/{id}", pc.UpdateProduct())
 	e.DELETE("/product/{id}", pc.DeletedProduct())
 }

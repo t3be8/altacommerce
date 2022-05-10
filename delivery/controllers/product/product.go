@@ -3,6 +3,7 @@ package product
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
@@ -111,5 +112,45 @@ func (pc *ProductController) DeletedProduct() echo.HandlerFunc {
 		}
 		log.Info("berhasi delete product")
 		return c.JSON(http.StatusOK, productView.SuccessDelete(res))
+	}
+}
+
+func (pc *ProductController) GetAllProductById() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := ExtractTokenUserId(c)
+
+		IdProduct := c.Param("id")
+		conID, _ := strconv.Atoi(IdProduct)
+
+		fmt.Println(id)
+		res, err := pc.Repo.GetAllById(conID)
+
+		if err != nil {
+			log.Warn("masalah pada server")
+			return c.JSON(http.StatusInternalServerError, view.InternalServerError())
+		}
+
+		log.Info("berhasil select product by ID")
+		return c.JSON(http.StatusOK, productView.SuccessSelect(res))
+	}
+}
+
+func (pc *ProductController) GetAllProductByCategory() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := ExtractTokenUserId(c)
+
+		idCategory := c.Param("produccategoryid")
+		conID, _ := strconv.Atoi(idCategory)
+
+		fmt.Println(id)
+		res, err := pc.Repo.GetAllByCategory(conID)
+
+		if err != nil {
+			log.Warn("masalah pada server")
+			return c.JSON(http.StatusInternalServerError, view.InternalServerError())
+		}
+
+		log.Info("berhasil select product by Category")
+		return c.JSON(http.StatusOK, productView.SuccessSelect(res))
 	}
 }

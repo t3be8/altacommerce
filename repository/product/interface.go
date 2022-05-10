@@ -7,4 +7,6 @@ type IProduct interface {
 	SelectProduct() ([]entity.Product, error)
 	UpdateProduct(ID int, Stock int) (entity.Product, error)
 	DeletedProduct(ID int) (entity.Product, error)
+	GetAllById(ID int) ([]entity.Product, error)
+	GetAllByCategory(categoryID int) ([]entity.Product, error)
 }

@@ -63,3 +63,23 @@ func (pr *ProductRepo) DeletedProduct(ID int) (entity.Product, error) {
 	log.Info()
 	return product, nil
 }
+
+func (pr *ProductRepo) GetAllById(ID int) ([]entity.Product, error) {
+	arrProduct := []entity.Product{}
+	if err := pr.Db.First(&arrProduct, ID).Error; err != nil {
+		log.Warn(err)
+		return nil, errors.New("tidak bisa select by id")
+	}
+	log.Info()
+	return arrProduct, nil
+}
+
+func (pr *ProductRepo) GetAllByCategory(categoryID int) ([]entity.Product, error) {
+	arrProduct := []entity.Product{}
+	if err := pr.Db.First(&arrProduct).Where("produccategoryid = ?", categoryID).Error; err != nil {
+		log.Warn(err)
+		return nil, errors.New("tidak bisa select by kategori")
+	}
+	log.Info()
+	return arrProduct, nil
+}
