@@ -53,7 +53,7 @@ func (pc *ProductController) InsertProduct() echo.HandlerFunc {
 		}
 
 		res, err := pc.Repo.InsertProduct(entity.Product{Name: tmpProduct.Name, Description: tmpProduct.Description, Price: tmpProduct.Price,
-			Stok: tmpProduct.Stok, Image: tmpProduct.Image})
+			Stok: tmpProduct.Stok, Images: tmpProduct.Images})
 
 		if err != nil {
 			log.Warn("masalah pada server")

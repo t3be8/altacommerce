@@ -5,7 +5,7 @@ type InsertProductRequest struct {
 	Description string `json:"description"`
 	Price       int    `json:"price"`
 	Stok        int    `json:"stok"`
-	Image       string `json:"image"`
+	Images      string `json:"images"`
 }
 
 type UpdateProductRequest struct {

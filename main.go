@@ -19,10 +19,8 @@ func main() {
 	// setup configuration
 	conf := config.InitConfig()
 	db := config.InitDB(*conf)
-	db.AutoMigrate(entity.Address{})
-	db.AutoMigrate(entity.User{})
-	db.AutoMigrate(entity.Product{})
-	db.AutoMigrate(entity.Category{})
+	db.AutoMigrate(&entity.User{}, &entity.Address{}, &entity.Category{}, &entity.Product{})
+
 	e := echo.New()
 
 	repoUser := userRepo.New(db)

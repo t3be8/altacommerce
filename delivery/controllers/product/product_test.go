@@ -72,7 +72,7 @@ func TestSelectProduct(t *testing.T) {
 type mockProductRepository struct{}
 
 func (mpr *mockProductRepository) SelectProduct() ([]entity.Product, error) {
-	return []entity.Product{{Name: "Asus ROG", Description: "ini laptop gaming", Price: 1200000, Stok: 100, Image: "image.com"}}, nil
+	return []entity.Product{{Name: "Asus ROG", Description: "ini laptop gaming", Price: 1200000, Stok: 100, Images: "image.com"}}, nil
 }
 
 func (mpr *mockProductRepository) InsertProduct(newProduct entity.Product) (entity.Product, error) {
@@ -88,11 +88,11 @@ func (mpr *mockProductRepository) DeletedProduct(ID int) (entity.Product, error)
 }
 
 func (mpr *mockProductRepository) GetAllById(ID int) ([]entity.Product, error) {
-	return []entity.Product{{Name: "Asus ROG", Description: "ini laptop gaming", Price: 1200000, Stok: 100, Image: "image.com"}}, nil
+	return []entity.Product{{Name: "Asus ROG", Description: "ini laptop gaming", Price: 1200000, Stok: 100, Images: "image.com"}}, nil
 }
 
 func (mpr *mockProductRepository) GetAllByCategory(ID int) ([]entity.Product, error) {
-	return []entity.Product{{Name: "Asus ROG", Description: "ini laptop gaming", Price: 1200000, Stok: 100, Image: "image.com"}}, nil
+	return []entity.Product{{Name: "Asus ROG", Description: "ini laptop gaming", Price: 1200000, Stok: 100, Images: "image.com"}}, nil
 }
 
 // type errorMockProductRepository struct{}
