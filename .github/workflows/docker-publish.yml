@@ -40,7 +40,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
+          password: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
             cd project/t3be8
