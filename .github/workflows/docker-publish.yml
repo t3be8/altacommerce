@@ -40,8 +40,8 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          #key: ${{ secrets.KEY }}
-          #port: ${{ secrets.PORT }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
           script: |
             cd project/t3be8
             docker-compose down --rmi all && docker-compose up -d
