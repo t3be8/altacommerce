@@ -35,12 +35,12 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/t3be8app:latest
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
+      - name: executing remote ssh commands using secret key
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.KEY }}
+          key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
             cd project/t3be8
