@@ -12,13 +12,12 @@ tags:
   - name: Orders
 servers:
   - url: http://localhost:8000/api/{version}
-    description: URL untuk fase development
-    variables:
-      version:
-        default: v1
-        enum:
-          - "v1"
-          - "v2"
+    description: Untuk Ujicoba di local
+  - url : 18.136.202.111:9001/api/v1/login
+    description: Untuk Login User
+  - url : 18.136.202.111:9001/api/v1/register
+    description: Untuk Register User
+   
 #-------------------------------
 # Authentication (login)
 #-------------------------------
@@ -381,11 +380,6 @@ paths:
           in: query
           schema:
             type: string
-        - name: Status
-          description: Status Cart
-          in: query
-          schema:
-            type: string
       responses:
         200:
           description: "Success Request"
@@ -429,11 +423,7 @@ paths:
           in: query
           schema:
             type: string
-        - name: Status
-          description: Status Cart
-          in: query
-          schema:
-            type: string
+        
       requestBody:
         content:
           application/json:
@@ -445,7 +435,7 @@ paths:
               product_id: "2"
               total: "20000"
               qty: "10"
-              status: "ready"
+              
       responses:
         201:
           description: "Success add user"
@@ -493,7 +483,7 @@ paths:
               product_id: "2"
               total: "70000"
               qty: "10"
-              status: "ready" 
+            
 
       responses:
         200:
