@@ -21,20 +21,16 @@ func main() {
 	db := config.InitDB(*conf)
 	db.AutoMigrate(entity.Address{})
 	db.AutoMigrate(entity.User{})
+	db.AutoMigrate(entity.Product{})
+	db.AutoMigrate(entity.Category{})
 	e := echo.New()
 
 	repoUser := userRepo.New(db)
-
-	controllerUser := userController.New(repoUser, validator.New())
-	routes.RegisterPath(e, controllerUser)
-	log.Fatal(e.Start(fmt.Sprintf(":%d", conf.Port)))
-
-	db.AutoMigrate(entity.Product{})
-	db.AutoMigrate(entity.ProductCategory{})
-
 	repoProduct := productRepo.New(db)
 
+	controllerUser := userController.New(repoUser, validator.New())
 	controllerProduct := productController.New(repoProduct, validator.New())
-	routes.ProductPath(e, controllerProduct)
+
+	routes.RegisterPath(e, controllerUser, controllerProduct)
 	log.Fatal(e.Start(fmt.Sprintf(":%d", conf.Port)))
 }

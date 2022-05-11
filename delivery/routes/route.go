@@ -9,7 +9,7 @@ import (
 	"github.com/t3be8/altacommerce/delivery/controllers/user"
 )
 
-func RegisterPath(e *echo.Echo, uc user.IUserController) {
+func RegisterPath(e *echo.Echo, uc user.IUserController, pc product.IProductController) {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -20,17 +20,15 @@ func RegisterPath(e *echo.Echo, uc user.IUserController) {
 
 	apiGroup := e.Group("/api/v1")
 
+	// user login and register enpoints route
 	apiGroup.POST("/login", uc.Login())
 	apiGroup.POST("/register", uc.Register())
-}
 
-func ProductPath(e *echo.Echo, pc product.IProductController) {
-	e.Pre(middleware.RemoveTrailingSlash())
-
-	e.POST("/product", pc.InsertProduct())
-	e.GET("/product", pc.SelectProduct())
-	e.GET("/product/{id}", pc.GetAllProductById())
-	e.GET("/categories/{categoryId}/product", pc.GetAllProductByCategory())
-	e.PUT("/product/{id}", pc.UpdateProduct())
-	e.DELETE("/product/{id}", pc.DeletedProduct())
+	// product enpoints route
+	apiGroup.POST("/product", pc.InsertProduct())
+	apiGroup.GET("/product", pc.SelectProduct())
+	apiGroup.GET("/product/{id}", pc.GetAllProductById())
+	apiGroup.GET("/categories/{categoryId}/product", pc.GetAllProductByCategory())
+	apiGroup.PUT("/product/{id}", pc.UpdateProduct())
+	apiGroup.DELETE("/product/{id}", pc.DeletedProduct())
 }

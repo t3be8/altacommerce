@@ -34,10 +34,10 @@ type Product struct {
 	Image            string
 	ProducCategoryID uint
 	UserID           uint
-	ProductCategory  []ProductCategory
+	Categories       []Category
 }
 
-type ProductCategory struct {
+type Category struct {
 	gorm.Model
 	Name string
 }
