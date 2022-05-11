@@ -14,7 +14,7 @@ type User struct {
 	Email     string
 	Phone     *string
 	Password  string
-	Addresses []Address
+	Addresses []Address `gorm:"foreignKey:UserID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type Address struct {
@@ -22,4 +22,22 @@ type Address struct {
 	Address string
 	KodePos int
 	UserID  uint
+}
+
+type Product struct {
+	gorm.Model
+	Name        string
+	Description string
+	Price       int
+	Status      string
+	Stok        int
+	Images      string
+	CategoryID  uint
+	UserID      uint
+}
+
+type Category struct {
+	gorm.Model
+	Name     string
+	Products []Product `gorm:"foreignKey:CategoryID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
