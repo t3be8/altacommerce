@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/stretchr/testify/assert"
 	"github.com/t3be8/altacommerce/entity"
 )
@@ -20,12 +19,13 @@ func TestSelectCart(t *testing.T) {
 		e := echo.New()
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		req.Header.Set(echo.HeaderAuthorization, "Bearer "+token)
+		req.Header.Add(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		res := httptest.NewRecorder()
 		context := e.NewContext(req, res)
 		context.SetPath("/cart")
 
 		cartController := New(&mockCartRepository{}, validator.New())
-		middleware.JWTWithConfig(middleware.JWTConfig{SigningMethod: "HS256", SigningKey: []byte("RH$SI4")})(cartController.SelectCart())(context)
+		cartController.SelectCart()(context)
 
 		type response struct {
 			Code    int
@@ -37,6 +37,7 @@ func TestSelectCart(t *testing.T) {
 		var resp response
 
 		json.Unmarshal([]byte(res.Body.Bytes()), &resp)
+		// log.Fatal(resp)
 		assert.Equal(t, 200, resp.Code)
 		assert.Equal(t, resp.Data[0].Total, "10000")
 		// assert.Equal(t, 500, resp.Code)

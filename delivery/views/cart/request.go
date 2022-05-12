@@ -6,8 +6,8 @@ type InsertCartRequest struct {
 }
 
 type UpdateCartRequest struct {
-	ID   int `json:"id"`
-	Stok int `json:"stok"`
+	ID    int `json:"id"`
+	Total int `json:"total"`
 }
 type DeleteCartRequest struct {
 	ID int `json:"id"`

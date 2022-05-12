@@ -44,9 +44,9 @@ func (cr *CartRepo) SelectCart() ([]entity.Cart, error) {
 	return arrCart, nil
 }
 
-func (cr *CartRepo) UpdateCart(ID int, Stock int) (entity.Cart, error) {
+func (cr *CartRepo) UpdateCart(ID int, Total int) (entity.Cart, error) {
 	cart := entity.Cart{}
-	if err := cr.Db.Model(&cart).Where("id = ?", ID).Update("stok", Stock).Error; err != nil {
+	if err := cr.Db.Model(&cart).Where("id = ?", ID).Update("stok", Total).Error; err != nil {
 		log.Warn(err)
 		return entity.Cart{}, errors.New("tidak bisa update")
 	}

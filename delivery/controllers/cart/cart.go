@@ -65,9 +65,9 @@ func (cc *CartController) InsertCart() echo.HandlerFunc {
 
 func (cc *CartController) SelectCart() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := ExtractTokenUserId(c)
+		// id := ExtractTokenUserId(c)
 
-		fmt.Println(id)
+		// fmt.Println(id)
 		res, err := cc.Repo.SelectCart()
 
 		if err != nil {
@@ -87,7 +87,7 @@ func (cc *CartController) UpdateCart() echo.HandlerFunc {
 
 		fmt.Println(id)
 
-		res, err := cc.Repo.UpdateCart(tmpCart.ID, tmpCart.Stok)
+		res, err := cc.Repo.UpdateCart(tmpCart.ID, tmpCart.Total)
 		if err != nil {
 			log.Warn("masalah pada server")
 			return c.JSON(http.StatusInternalServerError, view.InternalServerError())

@@ -29,8 +29,6 @@ func main() {
 	routes.RegisterPath(e, controllerUser)
 	log.Fatal(e.Start(fmt.Sprintf(":%d", conf.Port)))
 
-	db.AutoMigrate(entity.Cart{})
-
 	repocart := cartRepo.New(db)
 
 	controllerCart := cartController.New(repocart, validator.New())
