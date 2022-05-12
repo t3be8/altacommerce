@@ -5,11 +5,16 @@ info:
   description: File ini digunakan untuk Menampilkan OPEN API Aplikasi Ecommerce
  
 tags:
-  - name: Authentication
+  - name: Auth
+    description: API Endpoint Authentication
   - name: Users
+    description: API Endpoint Users
   - name: Products
+    description: API Endpoint Products
   - name: Carts
+    description: API Endpoint Carts
   - name: Orders
+    description: API Endpoint Orders
 servers:
   - url: http://localhost:8000/api/{version}
     description: URL untuk fase development
@@ -545,101 +550,20 @@ paths:
                     example: data berhasil dihapus
                   data:
                     type: object       
-  /Orders:
-    get:
-      tags:
-        - "Orders"
-      description: Get all Cart Yang sudah Transaksi
-      summary: Get All Orders Carts
-      parameters:
-        - name: User
-          description: User Id
-          in: query
-          schema:
-            type: integer
-        - name: Product
-          description: product id
-          in: query
-          schema:
-            type: string
-        - name: Total
-          description: Total Harga
-          in: query
-          schema:
-            type: string
-        - name: Qty
-          description: Berapa Qty
-          in: query
-          schema:
-            type: string
-        - name: Status
-          description: Status Orders
-          in: query
-          schema:
-            type: string
-      responses:
-        200:
-          description: "Success Request"
-          content:
-            "application/json":
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                  message:
-                    type: string
-                  data:
-                    type: object 
-                    $ref: "#/components/schemas/ListUser"
-                
-          $ref: "#/components/responses/500InternalServerError"  
+  #-------------------------------
+  # orders Section
+  #-------------------------------
+  /orders:
     post:
       tags:
         - "Orders"
-      summary: Menambah Orders Baru
-      description: Tambah Orders yang sudah ada di carts
-      parameters:
-        - name: User
-          description: User Id
-          in: query
-          schema:
-            type: integer
-        - name: Product
-          description: product id
-          in: query
-          schema:
-            type: string
-        - name: Total
-          description: Total Harga
-          in: query
-          schema:
-            type: string
-        - name: Qty
-          description: Berapa Qty
-          in: query
-          schema:
-            type: string
-        - name: Status
-          description: Status Orders
-          in: query
-          schema:
-            type: string
+      description: Create new transaction orders
+      summary: make transaction orders
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              #$ref : "#/components/schemas/User"
-            example:
-              user_id: "1"
-              product_id: "2"
-              total: "70000"
-              qty: "10"
-              status: "ready"
+        $ref: '#/components/requestBodies/OrderBody'
       responses:
         201:
-          description: "Success add order"
+          description: Created
           content:
             application/json:
               schema:
@@ -650,15 +574,19 @@ paths:
                     example: 201
                   message: 
                     type: string
-                    example: "Success add order"
+                    example: "Success register user"
                   data:
                     type: object
-                  #  $ref: "#/components/schemas/User"
-              example:
-                code: 201
-                message: success insert orders
+                    $ref: "#/components/schemas/UserResponse"
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
         500:
-          $ref: "#/components/responses/500InternalServerError"         
+          $ref: "#/components/responses/500InternalServerError"
+  
+         
 components:
   #-------------------------------
   # Reusable security schemes
@@ -720,7 +648,7 @@ components:
         status:
           type: string
           example: "ready"
-          
+    
     OrderSchema:
       type: object
       properties:
@@ -740,8 +668,62 @@ components:
         status:
           type: string
           example: "ready"
-          
+
+    OrderInCartRequest:
+      type: object
+      properties:
+        user_id: 
+          type: integer
+          example: 1
+        cart_id:
+          type: integer
+          example: 2
+        total_price:
+          type: number
+          example: 760000
+        total_qty:
+          type: number
+          example: 4
+
+    OrderProductsRequest:
+      type: object
+      properties:
+        user_id: 
+          type: integer
+          example: 1
+        total_price:
+          type: number
+          example: 760000
+        total_qty:
+          type: number
+          example: 4
     
+    AddressSchema:  
+      type: object
+      properties:
+        id: 
+          type: integer
+          example: 1
+        user_id: 
+          type: integer
+          example: 1
+        address:
+          type: string
+          example: Jl. Sultan Agung 1
+        kodepos:
+          type: number
+          example: 54321
+    
+    SimpleAddressSchema:  
+      type: object
+      properties:
+        address:
+          type: string
+          example: Jl. Sultan Agung 1
+        kodepos:
+          type: number
+          example: 54321    
+
     ListProductSchema:
       type: array
       items:
@@ -890,6 +872,13 @@ components:
 # Reusable request bodies
 #-------------------------------
   requestBodies:
+    OrderBody:
+      description: A JSON object containing orders information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrderInCartRequest'
     LoginBody:
       description: A JSON object containing login information
       required: true
