@@ -30,6 +30,7 @@ func New(repo userRepo.IUser, valid *validator.Validate) *UserController {
 func (uc *UserController) Register() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var tmpUser user.RegisterRequest
+		var resp user.UserResponse
 
 		if err := c.Bind(&tmpUser); err != nil {
 			log.Warn("salah input")
@@ -50,19 +51,28 @@ func (uc *UserController) Register() echo.HandlerFunc {
 			Phone:    &tmpUser.Phone,
 			Password: hash,
 		}
-		res, err := uc.Repo.Register(newUser)
+
+		data, err := uc.Repo.Register(newUser)
 		if err != nil {
 			log.Warn("masalah pada server")
 			return c.JSON(http.StatusInternalServerError, view.InternalServerError())
 		}
 
+		resp = user.UserResponse{
+			ID:    data.ID,
+			Name:  data.Name,
+			Email: data.Email,
+			Phone: data.Phone,
+		}
+
 		log.Info("berhasil register")
-		return c.JSON(http.StatusCreated, user.SuccessInsert(res))
+		return c.JSON(http.StatusCreated, user.RegisterSuccess(resp))
 	}
 }
 
 func (uc *UserController) Login() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		var resp user.UserResponse
 		param := user.LoginRequest{}
 
 		if err := c.Bind(&param); err != nil {
@@ -87,7 +97,14 @@ func (uc *UserController) Login() echo.HandlerFunc {
 			})
 		}
 
-		res := user.LoginResponse{Data: data}
+		resp = user.UserResponse{
+			ID:    data.ID,
+			Name:  data.Name,
+			Email: data.Email,
+			Phone: data.Phone,
+		}
+
+		res := user.LoginResponse{Data: resp}
 
 		if res.Token == "" {
 			token, _ := CreateToken(int(data.ID))

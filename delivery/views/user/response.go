@@ -2,19 +2,24 @@ package user
 
 import (
 	"net/http"
-
-	"github.com/t3be8/altacommerce/entity"
 )
 
 type LoginResponse struct {
-	Data  entity.User
+	Data  UserResponse
 	Token string
 }
 
-func SuccessInsert(data entity.User) map[string]interface{} {
+type UserResponse struct {
+	ID    uint    `json:"id"`
+	Name  string  `json:"name"`
+	Email string  `json:"email"`
+	Phone *string `json:"phone"`
+}
+
+func RegisterSuccess(data UserResponse) map[string]interface{} {
 	return map[string]interface{}{
 		"code":    http.StatusCreated,
-		"message": "berhasil insert data pegawai",
+		"message": "berhasil register user baru",
 		"status":  true,
 		"data":    data,
 	}
@@ -23,7 +28,7 @@ func SuccessInsert(data entity.User) map[string]interface{} {
 func BadRequest() map[string]interface{} {
 	return map[string]interface{}{
 		"code":    http.StatusBadRequest,
-		"message": "terdapat kesalahan pada input data pegawai",
+		"message": "terdapat kesalahan pada input data user",
 		"status":  false,
 		"data":    nil,
 	}
