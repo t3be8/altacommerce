@@ -26,7 +26,7 @@ type Address struct {
 
 type Product struct {
 	gorm.Model
-	Name        string
+	Name        string `gorm:"type:varchar(255)"`
 	Description string
 	Price       int
 	Status      string
