@@ -38,7 +38,7 @@ func TestSelectCart(t *testing.T) {
 
 		json.Unmarshal([]byte(res.Body.Bytes()), &resp)
 		assert.Equal(t, 200, resp.Code)
-		assert.Equal(t, resp.Data[0].Total, 10000)
+		assert.Equal(t, resp.Data[0].Total, "10000")
 		// assert.Equal(t, 500, resp.Code)
 	})
 
@@ -60,7 +60,7 @@ func TestDeleteCart(t *testing.T) {
 type mockCartRepository struct{}
 
 func (mcr *mockCartRepository) SelectCart() ([]entity.Cart, error) {
-	return []entity.Cart{{Total: 10000, Qty: 5}}, nil
+	return []entity.Cart{{Total: "10000", Qty: "5"}}, nil
 }
 
 func (mcr *mockCartRepository) InsertCart(newCart entity.Cart) (entity.Cart, error) {
@@ -74,29 +74,3 @@ func (mpr *mockCartRepository) UpdateCart(ID int, Stock int) (entity.Cart, error
 func (mpr *mockCartRepository) DeletedCart(ID int) (entity.Cart, error) {
 	return entity.Cart{}, nil
 }
-
-// type errorMockProductRepository struct{}
-
-// func (empr *errorMockProductRepository) SelectProduct() ([]entity.Product, error) {
-// 	return nil, errors.New(("tidak bisa select product"))
-// }
-
-// func (empr *errorMockProductRepository) InsertProduct(newProduct entity.Product) (entity.Product, error) {
-// 	return entity.Product{}, errors.New(("tidak bisa Insert product"))
-// }
-
-// func (empr *errorMockProductRepository) UpdateProduct(ID int, Stock int) (entity.Product, error) {
-// 	return entity.Product{}, errors.New(("tidak bisa select product"))
-// }
-
-// func (empr *errorMockProductRepository) DeletedProduct(ID int) (entity.Product, error) {
-// 	return entity.Product{}, errors.New(("tidak bisa select product"))
-// }
-
-// func (empr *errorMockProductRepository) GetAllById(ID int) ([]entity.Product, error) {
-// 	return []entity.Product{}, errors.New(("tidak bisa select product"))
-// }
-
-// func (empr *errorMockProductRepository) GetAllByCategory(ID int) ([]entity.Product, error) {
-// 	return []entity.Product{}, errors.New(("tidak bisa select product"))
-// }

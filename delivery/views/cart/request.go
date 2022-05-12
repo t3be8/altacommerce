@@ -1,7 +1,8 @@
 package cart
 
 type InsertCartRequest struct {
-	TotalQty int `json:"totalqty"`
+	Total string `json:"total"`
+	Qty   string `json:"qty"`
 }
 
 type UpdateCartRequest struct {

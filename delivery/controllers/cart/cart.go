@@ -51,7 +51,7 @@ func (cc *CartController) InsertCart() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, cartView.BadRequest())
 		}
 
-		res, err := cc.Repo.InsertCart(entity.Cart{TotalQty: tmpCart.TotalQty})
+		res, err := cc.Repo.InsertCart(entity.Cart{Total: tmpCart.Total, Qty: tmpCart.Qty})
 
 		if err != nil {
 			log.Warn("masalah pada server")

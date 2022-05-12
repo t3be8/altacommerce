@@ -44,9 +44,10 @@ type ProductCategory struct {
 
 type Cart struct {
 	gorm.Model
-	TotalQty  int
 	UserID    uint
 	ProductID uint
+	Total     string
+	Qty       string
 	User      []User
 	Product   []Product
 }
