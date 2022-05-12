@@ -15,6 +15,7 @@ type User struct {
 	Phone     *string
 	Password  string
 	Addresses []Address `gorm:"foreignKey:UserID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Products  []Product `gorm:"foreignKey:UserID"`
 }
 
 type Address struct {
