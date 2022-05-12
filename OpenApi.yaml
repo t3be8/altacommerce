@@ -82,7 +82,10 @@ paths:
                     example: "Success register user"
                   data:
                     type: object
-                    $ref: "#/components/schemas/UserSchema"
+                    $ref: "#/components/schemas/UserResponse"
+                  status:
+                    type: boolean
+                    example: true
         400:
           $ref: "#/components/responses/400BadRequest"
         500:
@@ -822,12 +825,28 @@ components:
         email:
           type: string
           example: gadipuranto@gmail.com
-        hp:
+        phone:
           type: string
           example: "08986817477"
         password:
           type: string
           example: admin1234
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Galang Adi Puranto
+        email:
+          type: string
+          example: gadipuranto@gmail.com
+        phone:
+          type: string
+          example: "08986817477"
         
 #-------------------------------
 # Reusable operation parameters

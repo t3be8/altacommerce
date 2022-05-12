@@ -18,7 +18,7 @@ CREATE TABLE `users` (
 	password varchar(255),
 	created_at timestamp default now(),
 	updated_at timestamp
-)
+);
 
 CREATE TABLE `address` (
 	id int PRIMARY KEY AUTO_INCREMENT,
