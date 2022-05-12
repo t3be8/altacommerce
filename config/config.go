@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/gommon/log"
 )
 
@@ -29,12 +30,12 @@ func InitConfig() *AppConfig {
 
 func GetConfig() *AppConfig {
 	var res AppConfig
-	// err := godotenv.Load(".env")
+	err := godotenv.Load(".env")
 
-	// if err != nil {
-	// 	log.Fatal("Cannot open config file")
-	// 	return nil
-	// }
+	if err != nil {
+		log.Fatal("Cannot open config file")
+		return nil
+	}
 	portconv, err := strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		log.Warn(err)

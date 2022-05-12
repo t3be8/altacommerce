@@ -26,7 +26,7 @@ type Address struct {
 
 type Product struct {
 	gorm.Model
-  Name        string
+	Name        string
 	Description string
 	Price       int
 	Status      string
@@ -39,7 +39,7 @@ type Product struct {
 type Category struct {
 	gorm.Model
 	Name     string
-	Products []Product `gorm:"foreignKey:CategoryID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"
+	Products []Product `gorm:"foreignKey:CategoryID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type Cart struct {
@@ -48,9 +48,6 @@ type Cart struct {
 	ProductID uint
 	Total     string
 	Qty       string
-	User      []User
-	Product   []Product
-	
+	Users     []User    `gorm:"foreignKey:UserID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Products  []Product `gorm:"foreignKey:ProductID; constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
-
-
