@@ -28,7 +28,7 @@ func RegisterPath(e *echo.Echo, uc user.IUserController, pc product.IProductCont
 	apiGroup.POST("/register", uc.Register())
 
 	// product enpoints route
-	apiGroup.POST("/products", pc.InsertProduct())
+	apiGroup.POST("/products", pc.InsertProduct(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("RU$SI4")}))
 	apiGroup.GET("/products", pc.SelectProduct())
 	apiGroup.GET("/products/{id}", pc.GetAllProductById())
 	apiGroup.GET("/categories/{categoryId}/products", pc.GetAllProductByCategory())
