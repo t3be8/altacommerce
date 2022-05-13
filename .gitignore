@@ -1,3 +1,2 @@
 .env
 docker-compose.yaml
-config/config.go

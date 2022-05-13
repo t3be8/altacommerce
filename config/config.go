@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"github.com/labstack/gommon/log"
+	"github.com/t3be8/altacommerce/entity"
+	"gorm.io/gorm"
 )
 
 type AppConfig struct {
@@ -48,4 +50,11 @@ func GetConfig() *AppConfig {
 	res.DBName = os.Getenv("DBNAME")
 
 	return &res
+}
+
+func AutoMigrate(db *gorm.DB) {
+	db.AutoMigrate(
+		&entity.User{},
+		&entity.Address{}, &entity.Shipment{}, &entity.OrderDetail{}, &entity.Order{}, &entity.Category{}, &entity.Product{}, &entity.Cart{})
+
 }
