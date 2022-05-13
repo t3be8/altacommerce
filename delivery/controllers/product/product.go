@@ -49,6 +49,7 @@ func (pc *ProductController) InsertProduct() echo.HandlerFunc {
 			CategoryID:  tmpProduct.CategoryID,
 			Name:        tmpProduct.Name,
 			Description: tmpProduct.Description,
+			Price:       tmpProduct.Price,
 			Stok:        tmpProduct.Stock,
 			Images:      tmpProduct.Images,
 		}

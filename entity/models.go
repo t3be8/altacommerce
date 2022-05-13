@@ -25,7 +25,7 @@ type Address struct {
 	Address string `gorm:"type:text;not null"`
 	KodePos int    `gorm:"type:varchar(6);not null"`
 	UserID  uint
-	Orders  []Order `gorm:"foreignKey:AddressID"`
+	// Orders  []Order `gorm:"foreignKey:AddressID"`
 }
 
 type Product struct {
@@ -33,7 +33,6 @@ type Product struct {
 	Name        string `gorm:"type:varchar(255)"`
 	Description string
 	Price       int
-	Status      string
 	Stok        int
 	Images      string
 	CategoryID  uint
@@ -60,7 +59,7 @@ type Order struct {
 	CartID     uint
 	Address    string
 	ShipmentID uint
-	Status     string `gorm:"type:decimal(18,2);default:'waiting'"`
+	Status     string `gorm:"type:varchar(10);default:'waiting'"`
 	TotalQty   int
 	TotalPrice float64   `gorm:"type:decimal(18,2);not null"`
 	TotalPay   float64   `gorm:"type:decimal(18,2);not null"`

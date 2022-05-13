@@ -70,7 +70,7 @@ func (oc *OrderController) CreateOrder() echo.HandlerFunc {
 func (oc *OrderController) CancelOrder() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id, _ := strconv.Atoi(c.Param("id"))
-		err := oc.Repo.CancelOrder(id)
+		err := oc.Repo.CancelOrder(uint(id))
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, view.InternalServerError())
 		}
