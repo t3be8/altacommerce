@@ -4,9 +4,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/gommon/log"
-	"github.com/t3be8/altacommerce/entity"
-	"gorm.io/gorm"
 )
 
 type AppConfig struct {
@@ -19,9 +18,7 @@ type AppConfig struct {
 }
 
 func InitConfig() *AppConfig {
-	var app *AppConfig
-
-	app = GetConfig()
+	app := GetConfig()
 	if app == nil {
 		log.Fatal("Cannot init config")
 		return nil
@@ -31,12 +28,12 @@ func InitConfig() *AppConfig {
 
 func GetConfig() *AppConfig {
 	var res AppConfig
-	// err := godotenv.Load(".env")
+	err := godotenv.Load(".env")
 
-	// if err != nil {
-	// 	log.Fatal("Cannot open config file")
-	// 	return nil
-	// }
+	if err != nil {
+		log.Fatal("Cannot open config file")
+		return nil
+	}
 	portconv, err := strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		log.Warn(err)
@@ -50,11 +47,4 @@ func GetConfig() *AppConfig {
 	res.DBName = os.Getenv("DBNAME")
 
 	return &res
-}
-
-func AutoMigrate(db *gorm.DB) {
-	db.AutoMigrate(
-		&entity.User{},
-		&entity.Address{}, &entity.Shipment{}, &entity.OrderDetail{}, &entity.Order{}, &entity.Category{}, &entity.Product{}, &entity.Cart{})
-
 }

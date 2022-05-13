@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/labstack/gommon/log"
+	"github.com/t3be8/altacommerce/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -24,4 +25,11 @@ func InitDB(config AppConfig) *gorm.DB {
 	}
 
 	return db
+}
+
+func AutoMigrate(db *gorm.DB) {
+	db.AutoMigrate(
+		&entity.User{},
+		&entity.Address{}, &entity.Shipment{}, &entity.OrderDetail{}, &entity.Order{}, &entity.Category{}, &entity.Product{}, &entity.Cart{})
+
 }

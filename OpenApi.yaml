@@ -30,7 +30,7 @@ paths:
   /login:
     post:
       tags:
-        - "Authentication"
+        - "Auth"
       summary: user login with credentials
       description: Untuk login Ke dalam Sistem dengan credentials yang dimiliki
       requestBody:
@@ -659,6 +659,16 @@ components:
           type: string
           example: "ready"
 
+    SimpleOrderRequest:
+      type: object
+      properties:
+        shipment_id: 
+          type: integer
+          example: 1
+        address:
+          type: string
+          example: "Jl. Kaliurang KM13 Sleman"
+
     OrderInCartRequest:
       type: object
       properties:
@@ -868,7 +878,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/OrderInCartRequest'
+            $ref: '#/components/schemas/SimpleOrderRequest'
     LoginBody:
       description: A JSON object containing login information
       required: true

@@ -19,44 +19,53 @@ func New(db *gorm.DB) *OrderRepo {
 }
 
 func (or *OrderRepo) CreateOrder(order entity.Order) (entity.Order, error) {
-	var items []entity.Cart
+	var items entity.Cart
 
-	if err := or.Db.Where("user_id = ?", order.UserID).Find(&items).Error; err != nil {
+	if err := or.Db.Table("carts").Find(&items).Error; err != nil {
+		log.Warn()
 		return order, err
 	}
+	log.Info(items)
 
-	if len(items) == 0 {
-		return order, errors.New("masukkan produk terlebih dahulu")
+	var items2 entity.Product
+
+	if err := or.Db.Where("id = ?", order.UserID).Find(&items2).Error; err != nil {
+		return order, err
 	}
+	log.Info(items2)
+	// if len(items) == 0 {
+	// 	return order, errors.New("masukkan produk terlebih dahulu")
+	// }
 
 	var totalPrice float64
 	var totalQty int
 
-	for _, v := range items {
-		totalPrice += float64(v.Qty) * v.Price
-		totalQty += v.Qty
-	}
+	// for _, val := range items {
+	// 	totalPrice += float64(val.Qty) * val.Price
+	// 	totalQty += val.Qty
+	// }
 
-	products := []entity.Product{}
-	var product entity.Product
-	if err := or.Db.Where("product_id = ?", items[0].ProductID).Find(&product).Error; err != nil {
-		return order, err
-	}
-	products = append(products, product)
+	// products := []entity.Product{}
+	// var product entity.Product
+	// if err := or.Db.Where("product_id = ?", items[0].ProductID).Find(&product).Error; err != nil {
+	// 	return order, err
+	// }
+	// products = append(products, product)
 
 	var shpCost entity.Shipment
-	if err := or.Db.Where("shipment_id = ?", order.ShipmentID).Find(&shpCost).Error; err != nil {
+	if err := or.Db.Where("id = ?", order.ShipmentID).Find(&shpCost).Error; err != nil {
 		return order, err
 	}
+	log.Info(shpCost)
 
-	order.Products = products
+	// order.Products = products
 	order.TotalQty = totalQty
 	order.TotalPrice = totalPrice
 	order.TotalPay = totalPrice + shpCost.Cost
 
-	if err := or.Db.Create(&order).Error; err != nil {
-		return order, err
-	}
+	// if err := or.Db.Create(&order).Error; err != nil {
+	// 	return order, err
+	// }
 
 	// if err := or.Db.Table("products").Where("", order.ShipmentID).Find(&shpCost).Error; err != nil {
 	// 	return order, err

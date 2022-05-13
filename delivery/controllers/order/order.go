@@ -1,7 +1,6 @@
 package order
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -56,14 +55,18 @@ func (oc *OrderController) CreateOrder() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, view.InternalServerError())
 		}
 
-		NumOrder := fmt.Sprintf("AE - %d", res.ID)
-		SnapMidtrans := oc.Midtrans.CreatePayout(NumOrder, res.TotalPay)
-		if SnapMidtrans == nil {
-			log.Warn("Error Snap")
-			return c.JSON(http.StatusInternalServerError, view.InternalServerError())
-		}
+		// NumOrder := fmt.Sprintf("AE - %d", res.ID)
+		// SnapMidtrans := oc.Midtrans.CreatePayout(NumOrder, res.TotalPay)
+		// if SnapMidtrans == nil {
+		// 	log.Warn("Error Snap")
+		// 	return c.JSON(http.StatusInternalServerError, view.InternalServerError())
+		// }
 
-		return c.JSON(http.StatusCreated, vo.StatusCreated(NumOrder, SnapMidtrans))
+		// return c.JSON(http.StatusCreated, vo.StatusCreated(NumOrder, SnapMidtrans))
+		return c.JSON(http.StatusCreated, map[string]interface{}{
+			"code": http.StatusOK,
+			"data": res.Status,
+		})
 	}
 }
 

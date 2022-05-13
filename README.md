@@ -17,7 +17,7 @@
 # Description
 Altaecommerce merupakan project group kolaborasi BE & FE pada pembelajaran alterra academy, Repo ini hasil kontribusi Galang, Alka, Rizki sebagai tim BE8. Altaecommerce adalah Aplikasi Rest Server project E-Commerce
 # Database Schema
-![ERD](https://github.com/t3be8/altacommerce/blob/main/screenshoot/erd.png)
+![ERD](https://github.com/t3be8/altacommerce/blob/main/screenshoot/be8group.png)
 
 # Testing Coverage
 Implement Unit Testing average 

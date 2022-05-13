@@ -12,6 +12,7 @@ import (
 	productController "github.com/t3be8/altacommerce/delivery/controllers/product"
 	userController "github.com/t3be8/altacommerce/delivery/controllers/user"
 	"github.com/t3be8/altacommerce/delivery/routes"
+	"github.com/t3be8/altacommerce/entity"
 	cartRepo "github.com/t3be8/altacommerce/repository/cart"
 	orderRepo "github.com/t3be8/altacommerce/repository/order"
 	productRepo "github.com/t3be8/altacommerce/repository/product"
@@ -22,7 +23,10 @@ import (
 func main() {
 	conf := config.InitConfig()
 	db := config.InitDB(*conf)
-	db.AutoMigrate(db)
+	db.AutoMigrate(
+		&entity.User{},
+		&entity.Address{}, &entity.Shipment{}, &entity.OrderDetail{}, &entity.Order{}, &entity.Category{}, &entity.Product{}, &entity.Cart{})
+
 	snap := utils.InitMidrans()
 
 	e := echo.New()
