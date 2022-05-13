@@ -575,7 +575,80 @@ paths:
           $ref: "#/components/responses/400BadRequest"
         500:
           $ref: "#/components/responses/500InternalServerError"
-  
+ 
+  /orders/{order_id}/cancel:
+    post:
+      tags:
+        - "Orders"
+      description: Cancel new transaction orders
+      summary: cancelling transaction orders
+      parameters:
+        - name: Order
+          description: order_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message: 
+                    type: string
+                    example: "Success Cancel Order"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/UserResponse"
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        500:
+          $ref: "#/components/responses/500InternalServerError"
+ 
+  /orders/{order_id}/payout:
+    post:
+      tags:
+        - "Orders"
+      description: Pay the transaction orders
+      summary: pay transaction orders
+      parameters:
+        - name: Order
+          description: order_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  message: 
+                    type: string
+                    example: "Success Cancel Order"
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/UserResponse"
+                  status:
+                    type: boolean
+                    example: true
+        400:
+          $ref: "#/components/responses/400BadRequest"
+        500:
+          $ref: "#/components/responses/500InternalServerError"
          
 components:
   #-------------------------------
