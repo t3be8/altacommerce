@@ -3,7 +3,6 @@
 [![Go.Dev reference](https://img.shields.io/badge/gorm-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/gorm.io/gorm?tab=doc)
 [![Go.Dev reference](https://img.shields.io/badge/echo-reference-blue?logo=go&logoColor=white)](https://github.com/labstack/echo)
 [![Go Reference](https://img.shields.io/badge/midtrans-reference-blue?logo=Midtrans&logoColor=white)](https://github.com/Midtrans/midtrans-go)
-[![Go Reference](https://img.shields.io/badge/gmaps-reference-blue?logo=GMaps&logoColor=white)](https://github.com/googlemaps/google-maps-services-go)
 
 # Table of Content
 - [Description](#description)
@@ -30,7 +29,7 @@ List of overall feature in this Project (To get more details see the API Documen
 | 1. | Register       | Authentication process                                                 |
 | 2. | Login          | Authentication process                                                 |
 | 3. | CRUD Product   | Create, Read, Update, and Delete Ingredient of the recipe in system    |
-| 4. | Cart           | Add Product to Cart,                                                   |
+| 4. | CRUD Cart      | Add Product to Cart,                                                   |
 | 5. | Order          | Create Order, Cancel Order,   Payout Order                             |
 
 
