@@ -37,6 +37,7 @@ type Product struct {
 	Images      string
 	CategoryID  uint
 	UserID      uint
+	Carts       []Cart `gorm:"foreignKey:ProductID"`
 }
 
 type Category struct {

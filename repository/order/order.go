@@ -2,6 +2,7 @@ package order
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/labstack/gommon/log"
 	"github.com/t3be8/altacommerce/entity"
@@ -19,31 +20,25 @@ func New(db *gorm.DB) *OrderRepo {
 }
 
 func (or *OrderRepo) CreateOrder(order entity.Order) (entity.Order, error) {
-	var items entity.Cart
+	var items []entity.Cart
 
-	if err := or.Db.Table("carts").Find(&items).Error; err != nil {
+	if err := or.Db.Where("user_id=?", order.UserID).Find(&items).Error; err != nil {
 		log.Warn()
 		return order, err
 	}
 	log.Info(items)
 
-	var items2 entity.Product
-
-	if err := or.Db.Where("id = ?", order.UserID).Find(&items2).Error; err != nil {
-		return order, err
+	if len(items) == 0 {
+		return order, errors.New("masukkan produk terlebih dahulu")
 	}
-	log.Info(items2)
-	// if len(items) == 0 {
-	// 	return order, errors.New("masukkan produk terlebih dahulu")
-	// }
 
 	var totalPrice float64
 	var totalQty int
 
-	// for _, val := range items {
-	// 	totalPrice += float64(val.Qty) * val.Price
-	// 	totalQty += val.Qty
-	// }
+	for _, val := range items {
+		totalPrice += float64(val.Qty) * val.Price
+		totalQty += val.Qty
+	}
 
 	// products := []entity.Product{}
 	// var product entity.Product
@@ -62,10 +57,11 @@ func (or *OrderRepo) CreateOrder(order entity.Order) (entity.Order, error) {
 	order.TotalQty = totalQty
 	order.TotalPrice = totalPrice
 	order.TotalPay = totalPrice + shpCost.Cost
+	fmt.Println(order)
 
-	// if err := or.Db.Create(&order).Error; err != nil {
-	// 	return order, err
-	// }
+	if err := or.Db.Create(&order).Error; err != nil {
+		return order, err
+	}
 
 	// if err := or.Db.Table("products").Where("", order.ShipmentID).Find(&shpCost).Error; err != nil {
 	// 	return order, err
