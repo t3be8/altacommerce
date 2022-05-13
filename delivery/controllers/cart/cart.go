@@ -51,7 +51,7 @@ func (cc *CartController) InsertCart() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, cartView.BadRequest())
 		}
 
-		res, err := cc.Repo.InsertCart(entity.Cart{Total: tmpCart.Total, Qty: tmpCart.Qty})
+		res, err := cc.Repo.InsertCart(entity.Cart{Price: tmpCart.Price, Qty: tmpCart.Qty})
 
 		if err != nil {
 			log.Warn("masalah pada server")
@@ -87,7 +87,7 @@ func (cc *CartController) UpdateCart() echo.HandlerFunc {
 
 		fmt.Println(id)
 
-		res, err := cc.Repo.UpdateCart(tmpCart.ID, tmpCart.Total)
+		res, err := cc.Repo.UpdateCart(tmpCart.ID, int(tmpCart.Price))
 		if err != nil {
 			log.Warn("masalah pada server")
 			return c.JSON(http.StatusInternalServerError, view.InternalServerError())

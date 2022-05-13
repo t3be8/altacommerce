@@ -1,13 +1,13 @@
 package cart
 
 type InsertCartRequest struct {
-	Total string `json:"total"`
-	Qty   string `json:"qty"`
+	Price float64 `json:"price"`
+	Qty   int     `json:"qty"`
 }
 
 type UpdateCartRequest struct {
-	ID    int `json:"id"`
-	Total int `json:"total"`
+	ID    int     `json:"id"`
+	Price float64 `json:"price"`
 }
 type DeleteCartRequest struct {
 	ID int `json:"id"`

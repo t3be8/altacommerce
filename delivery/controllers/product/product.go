@@ -6,11 +6,10 @@ import (
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
+	"github.com/t3be8/altacommerce/delivery/middlewares"
 	view "github.com/t3be8/altacommerce/delivery/views"
-
 	productView "github.com/t3be8/altacommerce/delivery/views/product"
 	"github.com/t3be8/altacommerce/entity"
 	productRepo "github.com/t3be8/altacommerce/repository/product"
@@ -28,16 +27,6 @@ func New(repo productRepo.IProduct, valid *validator.Validate) *ProductControlle
 	}
 }
 
-func ExtractTokenUserId(e echo.Context) float64 {
-	user := e.Get("user").(*jwt.Token)
-	if user.Valid {
-		claims := user.Claims.(jwt.MapClaims)
-		userId := claims["userId"].(float64)
-		return userId
-	}
-	return 0
-}
-
 func (pc *ProductController) InsertProduct() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var tmpProduct productView.InsertProductRequest
@@ -52,8 +41,19 @@ func (pc *ProductController) InsertProduct() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, productView.BadRequest())
 		}
 
-		res, err := pc.Repo.InsertProduct(entity.Product{Name: tmpProduct.Name, Description: tmpProduct.Description, Price: tmpProduct.Price,
-			Stok: tmpProduct.Stok, Images: tmpProduct.Images})
+		user_id := middlewares.ExtractTokenUserId(c)
+		log.Info(user_id)
+
+		p := entity.Product{
+			UserID:      uint(user_id),
+			CategoryID:  tmpProduct.CategoryID,
+			Name:        tmpProduct.Name,
+			Description: tmpProduct.Description,
+			Stok:        tmpProduct.Stock,
+			Images:      tmpProduct.Images,
+		}
+
+		res, err := pc.Repo.InsertProduct(p)
 
 		if err != nil {
 			log.Warn("masalah pada server")
@@ -62,12 +62,13 @@ func (pc *ProductController) InsertProduct() echo.HandlerFunc {
 
 		log.Info("berhasil insert product")
 		return c.JSON(http.StatusCreated, productView.SuccessInsert(res))
+		// return c.JSON(http.StatusOK, view.OK("hai", "hai"))
 	}
 }
 
 func (pc *ProductController) SelectProduct() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := ExtractTokenUserId(c)
+		id := middlewares.ExtractTokenUserId(c)
 
 		fmt.Println(id)
 		res, err := pc.Repo.SelectProduct()
@@ -85,7 +86,7 @@ func (pc *ProductController) SelectProduct() echo.HandlerFunc {
 func (pc *ProductController) UpdateProduct() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var tmpProduct productView.UpdateProductRequest
-		id := ExtractTokenUserId(c)
+		id := middlewares.ExtractTokenUserId(c)
 
 		fmt.Println(id)
 
@@ -102,7 +103,7 @@ func (pc *ProductController) UpdateProduct() echo.HandlerFunc {
 func (pc *ProductController) DeletedProduct() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var tmpProduct productView.DeleteProductRequest
-		id := ExtractTokenUserId(c)
+		id := middlewares.ExtractTokenUserId(c)
 
 		fmt.Println(id)
 		res, err := pc.Repo.DeletedProduct(tmpProduct.ID)
@@ -117,7 +118,7 @@ func (pc *ProductController) DeletedProduct() echo.HandlerFunc {
 
 func (pc *ProductController) GetAllProductById() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := ExtractTokenUserId(c)
+		id := middlewares.ExtractTokenUserId(c)
 
 		IdProduct := c.Param("id")
 		conID, _ := strconv.Atoi(IdProduct)
@@ -137,7 +138,7 @@ func (pc *ProductController) GetAllProductById() echo.HandlerFunc {
 
 func (pc *ProductController) GetAllProductByCategory() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id := ExtractTokenUserId(c)
+		id := middlewares.ExtractTokenUserId(c)
 
 		idCategory := c.Param("produccategoryid")
 		conID, _ := strconv.Atoi(idCategory)

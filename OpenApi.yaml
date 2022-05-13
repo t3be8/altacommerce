@@ -421,7 +421,7 @@ paths:
           in: query
           schema:
             type: string
-        - name: Total
+        - name: Price
           description: Total Harga
           in: query
           schema:

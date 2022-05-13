@@ -20,7 +20,7 @@ import (
 func main() {
 	conf := config.InitConfig()
 	db := config.InitDB(*conf)
-	db.AutoMigrate(&entity.User{}, &entity.Address{}, &entity.Category{}, &entity.Product{}, &entity.Cart{})
+	db.AutoMigrate(&entity.User{}, &entity.Address{}, &entity.Shipment{}, &entity.OrderDetail{}, &entity.Order{}, &entity.Category{}, &entity.Product{}, &entity.Cart{})
 
 	e := echo.New()
 

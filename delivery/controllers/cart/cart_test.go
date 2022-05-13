@@ -39,7 +39,7 @@ func TestSelectCart(t *testing.T) {
 		json.Unmarshal([]byte(res.Body.Bytes()), &resp)
 		// log.Fatal(resp)
 		assert.Equal(t, 200, resp.Code)
-		assert.Equal(t, resp.Data[0].Total, "10000")
+		assert.Equal(t, resp.Data[0].Price, 10000)
 		// assert.Equal(t, 500, resp.Code)
 	})
 
@@ -61,7 +61,7 @@ func TestDeleteCart(t *testing.T) {
 type mockCartRepository struct{}
 
 func (mcr *mockCartRepository) SelectCart() ([]entity.Cart, error) {
-	return []entity.Cart{{Total: "10000", Qty: "5"}}, nil
+	return []entity.Cart{{Price: 10000, Qty: 5}}, nil
 }
 
 func (mcr *mockCartRepository) InsertCart(newCart entity.Cart) (entity.Cart, error) {

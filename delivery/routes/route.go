@@ -7,11 +7,12 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/t3be8/altacommerce/delivery/controllers/cart"
+	"github.com/t3be8/altacommerce/delivery/controllers/order"
 	"github.com/t3be8/altacommerce/delivery/controllers/product"
 	"github.com/t3be8/altacommerce/delivery/controllers/user"
 )
 
-func RegisterPath(e *echo.Echo, uc user.IUserController, pc product.IProductController, cc cart.ICartController) {
+func RegisterPath(e *echo.Echo, uc user.IUserController, pc product.IProductController, cc cart.ICartController, oc order.IOrderController) {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -27,16 +28,20 @@ func RegisterPath(e *echo.Echo, uc user.IUserController, pc product.IProductCont
 	apiGroup.POST("/register", uc.Register())
 
 	// product enpoints route
-	apiGroup.POST("/product", pc.InsertProduct())
-	apiGroup.GET("/product", pc.SelectProduct())
-	apiGroup.GET("/product/{id}", pc.GetAllProductById())
-	apiGroup.GET("/categories/{categoryId}/product", pc.GetAllProductByCategory())
-	apiGroup.PUT("/product/{id}", pc.UpdateProduct())
-	apiGroup.DELETE("/product/{id}", pc.DeletedProduct())
-  
-  apiGroup.POST("/cart", cc.InsertCart())
+	apiGroup.POST("/products", pc.InsertProduct())
+	apiGroup.GET("/products", pc.SelectProduct())
+	apiGroup.GET("/products/{id}", pc.GetAllProductById())
+	apiGroup.GET("/categories/{categoryId}/products", pc.GetAllProductByCategory())
+	apiGroup.PUT("/products/{id}", pc.UpdateProduct())
+	apiGroup.DELETE("/products/{id}", pc.DeletedProduct())
+
+	apiGroup.POST("/cart", cc.InsertCart())
 	apiGroup.GET("/cart/{id}", cc.SelectCart())
 	apiGroup.PUT("/cart/{id}", cc.UpdateCart())
 	apiGroup.DELETE("/cart/{id}", cc.DeletedCart())
+
+	apiGroup.POST("/orders", oc.CreateOrder(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("RU$SI4")}))
+	apiGroup.POST("/orders/{order_id}/cancel", oc.CancelOrder(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("RU$SI4")}))
+	apiGroup.POST("/orders/{order_id}/payout", oc.Payment(), middleware.JWTWithConfig(middleware.JWTConfig{SigningKey: []byte("RU$SI4")}))
 
 }
